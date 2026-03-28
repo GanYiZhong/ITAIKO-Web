@@ -53,8 +53,6 @@ interface DeviceContextValue {
   clearPs4Auth: () => Promise<boolean>;
   readPs4AuthStatus: () => Promise<boolean>;
   rebootToBootsel: () => Promise<void>;
-  uploadBootScreen: (data: Uint8Array) => Promise<boolean>;
-  clearBootScreen: () => Promise<boolean>;
 
   // Streaming
   isStreaming: boolean;
@@ -157,70 +155,6 @@ export function DeviceProvider({ children }: DeviceProviderProps) {
     }
   };
 
-  const uploadBootScreen = async (data: Uint8Array): Promise<boolean> => {
-    if (!isConnected) return false;
-    let previousMode: StreamingMode = 'none';
-    try {
-      // 0. Ensure streaming is stopped to prevent buffer pollution
-      if (streaming.isStreaming) {
-         previousMode = streaming.streamingMode;
-         await streaming.stopStreaming();
-         // Wait for streaming to actually stop and buffer to clear
-         await new Promise(r => setTimeout(r, 200));
-      }
-
-      // 1. Start upload
-      serial.clearBuffer();
-      await serial.sendCommand(DeviceCommand.BOOT_SCREEN_START);
-      
-      // Give device a moment to enter upload mode
-      await new Promise(r => setTimeout(r, 200));
-
-      // 2. Send binary data in chunks of 64 bytes (USB CDC packet size)
-      const CHUNK_SIZE = 64;
-      for (let i = 0; i < data.length; i += CHUNK_SIZE) {
-        const chunk = data.slice(i, i + CHUNK_SIZE);
-        await serial.sendBinary(chunk);
-        // Small delay between chunks to prevent buffer overflow on device
-        await new Promise(r => setTimeout(r, 10));
-      }
-      
-      // 3. Wait for save confirmation (Flash write takes time)
-      const fullResponse = await serial.readUntilTimeout(5000); // Increased timeout to 5s
-      const lines = fullResponse.split('\n');
-      const savedSuccessfully = lines.some(line => line.includes("BITMAP_SAVED"));
-
-      if (savedSuccessfully) {
-        return true;
-      }
-      
-      console.error("Bitmap save failed or timed out. Full response:", fullResponse);
-      return false;
-
-    } catch (e) {
-      console.error("Error uploading boot screen:", e);
-      return false;
-    } finally {
-        // Always restart streaming after the operation finishes
-        if (previousMode !== 'none') {
-            streaming.startStreaming(previousMode);
-        }
-    }
-  };
-
-  const clearBootScreen = async (): Promise<boolean> => {
-    if (!isConnected) return false;
-    try {
-      serial.clearBuffer();
-      await serial.sendCommand(DeviceCommand.BOOT_SCREEN_CLEAR);
-      const response = await serial.readUntilTimeout(1000);
-      return response.includes("BITMAP_CLEARED");
-    } catch (e) {
-      console.error("Error clearing boot screen:", e);
-      return false;
-    }
-  };
-  
   const handleInstallUpdate = async () => {
     await firmwareUpdate.installUpdate(rebootToBootsel);
     
@@ -297,8 +231,6 @@ export function DeviceProvider({ children }: DeviceProviderProps) {
       clearPs4Auth: deviceConfig.clearPs4Auth,
       readPs4AuthStatus: deviceConfig.readPs4AuthStatus,
       rebootToBootsel,
-      uploadBootScreen,
-      clearBootScreen,
 
       // Streaming
       isStreaming: streaming.isStreaming,

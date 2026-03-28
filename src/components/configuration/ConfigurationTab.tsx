@@ -9,7 +9,6 @@ import { TimingSettings } from "./TimingSettings";
 import { ADCChannelSettings } from "./ADCChannelSettings";
 import { InteractiveKeyMapping } from "./InteractiveKeyMapping";
 import { DrumKeyMapping } from "./DrumKeyMapping";
-import { BootScreenEditor } from "./BootScreenEditor";
 import { PS4AuthSetup } from "./PS4AuthSetup";
 import { PAD_NAMES, PAD_COLORS } from "@/types";
 import { HelpButton } from "@/components/ui/help-modal";
@@ -173,8 +172,6 @@ export function ConfigurationTab() {
       {/* Hit History Grid - Always visible when connected */}
       <HitHistoryGrid />
 
-      <PS4AuthSetup />
-
       {/* Configuration Settings - Deactivated when not ready */}
       <div className={`space-y-6 transition-all duration-500 ${!isReady ? "pointer-events-none opacity-50" : ""}`}>
         {/* Global Settings - Advanced only */}
@@ -244,8 +241,8 @@ export function ConfigurationTab() {
             {/* Key Mappings */}
             <InteractiveKeyMapping />
 
-            {/* Custom Boot Screen */}
-            <BootScreenEditor />
+            {/* PS4 Authentication */}
+            <PS4AuthSetup />
           </>
         )}
 

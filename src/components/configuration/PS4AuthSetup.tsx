@@ -176,7 +176,7 @@ function SetupModalContent({
 }
 
 export function PS4AuthSetup() {
-  const { isConnected, readPs4AuthStatus, uploadPs4Auth, clearPs4Auth, disconnect } = useDevice();
+  const { isConnected, isReady, readPs4AuthStatus, uploadPs4Auth, clearPs4Auth, disconnect } = useDevice();
 
   const [authPresent, setAuthPresent] = useState<boolean | null>(null);
   const [isCheckingStatus, setIsCheckingStatus] = useState(false);
@@ -206,25 +206,23 @@ export function PS4AuthSetup() {
   }, [isConnected, readPs4AuthStatus]);
 
   useEffect(() => {
-    if (isConnected) {
+    if (isReady) {
       checkStatus();
     } else {
       setAuthPresent(null);
     }
-  }, [isConnected]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Auto-close setup modal and refresh status when device reconnects after reboot
+  // Auto-close modals when device comes back ready after reboot
   useEffect(() => {
-    if (isConnected && step === "rebooting" && setupOpen) {
+    if (isReady && step === "rebooting" && setupOpen) {
       setSetupOpen(false);
-      checkStatus();
     }
-    if (isConnected && clearDone && clearOpen) {
+    if (isReady && clearDone && clearOpen) {
       setClearOpen(false);
       setClearDone(false);
-      checkStatus();
     }
-  }, [isConnected]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleOpenSetup = () => {
     setStep("select");
@@ -357,7 +355,7 @@ export function PS4AuthSetup() {
 
       {/* Setup modal */}
       <Dialog open={setupOpen} onOpenChange={(open) => { if (!open) handleCloseSetup(); }}>
-        <DialogContent className="sm:max-w-[460px]">
+        <DialogContent className="sm:max-w-115">
           <DialogHeader>
             <DialogTitle>Set Up PS4 Authentication</DialogTitle>
             <DialogDescription>
@@ -391,7 +389,7 @@ export function PS4AuthSetup() {
 
       {/* Clear confirmation modal */}
       <Dialog open={clearOpen} onOpenChange={(open) => { if (!open) handleCloseClear(); }}>
-        <DialogContent className="sm:max-w-[400px]">
+        <DialogContent className="sm:max-w-100">
           <DialogHeader>
             <DialogTitle>Remove PS4 Auth Key</DialogTitle>
             <DialogDescription>
