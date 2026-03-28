@@ -1,18 +1,42 @@
 import { useState, useCallback, useEffect } from "react";
-import type { DeviceConfig, PadName, PadThresholds, TimingConfig, DeviceCommand, KeyMappings, ADCChannels } from "@/types";
+import type {
+  DeviceConfig,
+  PadName,
+  PadThresholds,
+  TimingConfig,
+  DeviceCommand,
+  KeyMappings,
+  ADCChannels,
+  PS4AuthBackupData,
+} from "@/types";
 import { DeviceCommand as DeviceCommandValues } from "@/types";
 import {
   parseSettingsResponse,
   settingsToConfig,
   configToSettingsString,
 } from "@/lib/serial-protocol";
+import {
+  buildPs4AuthUploadBundle,
+  fromBackupData,
+  parsePs4AuthExportResponse,
+} from "@/lib/ps4-auth-generator";
 import { DEFAULT_DEVICE_CONFIG } from "@/lib/default-config";
 
 interface UseDeviceConfigProps {
   sendCommand: (command: DeviceCommand, data?: string) => Promise<void>;
+  sendBinary?: (data: Uint8Array) => Promise<void>;
   readUntilTimeout: (timeoutMs?: number) => Promise<string>;
   clearBuffer?: () => void;
   isConnected: boolean;
+}
+
+interface ConfigBackupPayload {
+  pads: DeviceConfig["pads"];
+  doubleInputMode: boolean;
+  timing: DeviceConfig["timing"];
+  keyMappings?: DeviceConfig["keyMappings"];
+  adcChannels?: DeviceConfig["adcChannels"];
+  ps4Auth?: PS4AuthBackupData;
 }
 
 interface UseDeviceConfigReturn {
@@ -39,8 +63,13 @@ interface UseDeviceConfigReturn {
   resetADCChannels: () => void;
 
   // Import/Export
-  exportConfig: () => void;
+  exportConfig: () => Promise<void>;
   importConfig: (file: File) => Promise<boolean>;
+
+  // PS4 Auth
+  uploadPs4Auth: (authData: PS4AuthBackupData) => Promise<boolean>;
+  clearPs4Auth: () => Promise<boolean>;
+  readPs4AuthStatus: () => Promise<boolean>;
 
   // Update helpers
   updatePadThreshold: (
@@ -64,8 +93,11 @@ interface UseDeviceConfigReturn {
   ) => void;
 }
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export function useDeviceConfig({
   sendCommand,
+  sendBinary,
   readUntilTimeout,
   clearBuffer,
   isConnected,
@@ -106,31 +138,29 @@ export function useDeviceConfig({
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Check for Ctrl (or Cmd on Mac)
       if (e.ctrlKey || e.metaKey) {
-        if (e.key === 'z') {
-           e.preventDefault();
-           if (e.shiftKey) {
-             redo();
-           } else {
-             undo();
-           }
-        } else if (e.key === 'y') {
-           e.preventDefault();
-           redo();
+        if (e.key === "z") {
+          e.preventDefault();
+          if (e.shiftKey) {
+            redo();
+          } else {
+            undo();
+          }
+        } else if (e.key === "y") {
+          e.preventDefault();
+          redo();
         }
       }
     };
-    
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [undo, redo]);
 
-  // Internal helper to handle history commit inside update functions
   const handleCommit = (newConfig: DeviceConfig) => {
-    setHistory(h => {
-        const newH = [...h, lastCommittedConfig];
-        return newH.length > 50 ? newH.slice(newH.length - 50) : newH;
+    setHistory((h) => {
+      const newHistory = [...h, lastCommittedConfig];
+      return newHistory.length > 50 ? newHistory.slice(newHistory.length - 50) : newHistory;
     });
     setFuture([]);
     setLastCommittedConfig(newConfig);
@@ -141,7 +171,7 @@ export function useDeviceConfig({
 
     setIsLoading(true);
     try {
-      if (clearBuffer) clearBuffer();
+      clearBuffer?.();
       await sendCommand(DeviceCommandValues.READ_SETTINGS);
       const response = await readUntilTimeout(1000);
       const { settings, version } = parseSettingsResponse(response);
@@ -150,12 +180,9 @@ export function useDeviceConfig({
         const newConfig = settingsToConfig(settings, version);
         setConfig(newConfig);
         setSavedConfig(newConfig);
-        
-        // Reset history
         setLastCommittedConfig(newConfig);
         setHistory([]);
         setFuture([]);
-        
         return true;
       }
 
@@ -166,7 +193,7 @@ export function useDeviceConfig({
     } finally {
       setIsLoading(false);
     }
-  }, [isConnected, sendCommand, readUntilTimeout]);
+  }, [isConnected, sendCommand, readUntilTimeout, clearBuffer]);
 
   const writeToDevice = useCallback(async (): Promise<boolean> => {
     if (!isConnected) return false;
@@ -174,7 +201,7 @@ export function useDeviceConfig({
     setIsLoading(true);
     try {
       const settingsString = configToSettingsString(config);
-      if (clearBuffer) clearBuffer();
+      clearBuffer?.();
       await sendCommand(DeviceCommandValues.WRITE_MODE, settingsString);
       setSavedConfig(config);
       return true;
@@ -184,18 +211,16 @@ export function useDeviceConfig({
     } finally {
       setIsLoading(false);
     }
-  }, [isConnected, sendCommand, config]);
+  }, [isConnected, sendCommand, config, clearBuffer]);
 
   const saveToFlash = useCallback(async (): Promise<boolean> => {
     if (!isConnected) return false;
 
     setIsLoading(true);
     try {
-      // First write current config
       const writeSuccess = await writeToDevice();
       if (!writeSuccess) return false;
 
-      // Then save to flash
       await sendCommand(DeviceCommandValues.SAVE_TO_FLASH);
       return true;
     } catch (err) {
@@ -206,18 +231,71 @@ export function useDeviceConfig({
     }
   }, [isConnected, sendCommand, writeToDevice]);
 
+  const readPs4AuthStatus = useCallback(async (): Promise<boolean> => {
+    if (!isConnected) return false;
+
+    try {
+      clearBuffer?.();
+      await sendCommand(DeviceCommandValues.PS4_AUTH_STATUS);
+      const response = await readUntilTimeout(800);
+      return response.includes("PS4_AUTH_STATUS:1");
+    } catch (err) {
+      console.error("Failed to read PS4 auth status:", err);
+      return false;
+    }
+  }, [isConnected, sendCommand, readUntilTimeout, clearBuffer]);
+
+  const uploadPs4Auth = useCallback(async (authData: PS4AuthBackupData): Promise<boolean> => {
+    if (!isConnected || !sendBinary) return false;
+
+    try {
+      const generated = fromBackupData(authData);
+      const bundle = buildPs4AuthUploadBundle(generated);
+
+      clearBuffer?.();
+      await sendCommand(DeviceCommandValues.PS4_AUTH_UPLOAD_START);
+      await delay(120);
+
+      const chunkSize = 64;
+      for (let i = 0; i < bundle.length; i += chunkSize) {
+        await sendBinary(bundle.slice(i, i + chunkSize));
+        await delay(4);
+      }
+
+      const response = await readUntilTimeout(6000);
+      return response.includes("PS4_AUTH_SAVED");
+    } catch (err) {
+      console.error("Failed to upload PS4 auth:", err);
+      return false;
+    }
+  }, [isConnected, sendBinary, clearBuffer, sendCommand, readUntilTimeout]);
+
+  const clearPs4Auth = useCallback(async (): Promise<boolean> => {
+    if (!isConnected) return false;
+
+    try {
+      clearBuffer?.();
+      await sendCommand(DeviceCommandValues.PS4_AUTH_CLEAR);
+      const response = await readUntilTimeout(1200);
+      return response.includes("PS4_AUTH_CLEARED");
+    } catch (err) {
+      console.error("Failed to clear PS4 auth:", err);
+      return false;
+    }
+  }, [isConnected, clearBuffer, sendCommand, readUntilTimeout]);
+
   const resetToDefaults = useCallback((): void => {
     setConfig(() => {
-        const next = DEFAULT_DEVICE_CONFIG;
-        handleCommit(next);
-        return next;
+      const next = DEFAULT_DEVICE_CONFIG;
+      handleCommit(next);
+      return next;
     });
   }, [lastCommittedConfig]);
 
   const resetPadThresholds = useCallback((): void => {
-    setConfig((_) => {
+    setConfig((prev) => {
       const next = {
-        ..._,
+        ...prev,
         pads: DEFAULT_DEVICE_CONFIG.pads,
       };
       handleCommit(next);
@@ -226,9 +304,9 @@ export function useDeviceConfig({
   }, [lastCommittedConfig]);
 
   const resetTiming = useCallback((): void => {
-    setConfig((_) => {
+    setConfig((prev) => {
       const next = {
-        ..._,
+        ...prev,
         timing: DEFAULT_DEVICE_CONFIG.timing,
       };
       handleCommit(next);
@@ -237,30 +315,29 @@ export function useDeviceConfig({
   }, [lastCommittedConfig]);
 
   const resetKeyMappings = useCallback((): void => {
-    setConfig((_) => {
-        const next = {
-          ..._,
-          keyMappings: DEFAULT_DEVICE_CONFIG.keyMappings,
-        };
-        handleCommit(next);
-        return next;
+    setConfig((prev) => {
+      const next = {
+        ...prev,
+        keyMappings: DEFAULT_DEVICE_CONFIG.keyMappings,
+      };
+      handleCommit(next);
+      return next;
     });
   }, [lastCommittedConfig]);
 
   const resetADCChannels = useCallback((): void => {
-    setConfig((_) => {
-        const next = {
-          ..._,
-          adcChannels: DEFAULT_DEVICE_CONFIG.adcChannels,
-        };
-        handleCommit(next);
-        return next;
+    setConfig((prev) => {
+      const next = {
+        ...prev,
+        adcChannels: DEFAULT_DEVICE_CONFIG.adcChannels,
+      };
+      handleCommit(next);
+      return next;
     });
   }, [lastCommittedConfig]);
 
-  const exportConfig = useCallback((): void => {
-    // Create a clean config object without firmwareVersion (device-specific)
-    const exportData = {
+  const exportConfig = useCallback(async (): Promise<void> => {
+    const exportData: ConfigBackupPayload = {
       pads: config.pads,
       doubleInputMode: config.doubleInputMode,
       timing: config.timing,
@@ -268,50 +345,77 @@ export function useDeviceConfig({
       adcChannels: config.adcChannels,
     };
 
+    if (isConnected) {
+      try {
+        clearBuffer?.();
+        await sendCommand(DeviceCommandValues.PS4_AUTH_EXPORT);
+        const authResponse = await readUntilTimeout(3000);
+        const ps4Auth = parsePs4AuthExportResponse(authResponse);
+        if (ps4Auth) {
+          exportData.ps4Auth = ps4Auth;
+        }
+      } catch (err) {
+        console.warn("Failed to include PS4 auth in export:", err);
+      }
+    }
+
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
       type: "application/json",
     });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `itaiko-config-${new Date().toISOString().split("T")[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `itaiko-config-${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(anchor);
+    anchor.click();
+    document.body.removeChild(anchor);
     URL.revokeObjectURL(url);
-  }, [config]);
+  }, [config, isConnected, clearBuffer, sendCommand, readUntilTimeout]);
 
   const importConfig = useCallback(async (file: File): Promise<boolean> => {
     try {
       const text = await file.text();
-      const imported = JSON.parse(text);
+      const imported = JSON.parse(text) as Partial<ConfigBackupPayload>;
 
-      // Validate the imported config has required fields
       if (!imported.pads || !imported.timing) {
         console.error("Invalid config file: missing required fields");
         return false;
       }
 
-      // Merge with current config, preserving firmwareVersion
-      setConfig((prev) => {
-          const next = {
-            ...prev,
-            pads: imported.pads ?? prev.pads,
-            doubleInputMode: imported.doubleInputMode ?? prev.doubleInputMode,
-            timing: imported.timing ?? prev.timing,
-            keyMappings: imported.keyMappings ?? prev.keyMappings,
-            adcChannels: imported.adcChannels ?? prev.adcChannels,
-          };
-          handleCommit(next);
-          return next;
-      });
+      const nextConfig: DeviceConfig = {
+        ...config,
+        pads: imported.pads ?? config.pads,
+        doubleInputMode: imported.doubleInputMode ?? config.doubleInputMode,
+        timing: imported.timing ?? config.timing,
+        keyMappings: imported.keyMappings ?? config.keyMappings,
+        adcChannels: imported.adcChannels ?? config.adcChannels,
+      };
 
-      return true;
+      // Persist regular settings immediately when connected.
+      if (isConnected) {
+        const settingsString = configToSettingsString(nextConfig);
+        clearBuffer?.();
+        await sendCommand(DeviceCommandValues.WRITE_MODE, settingsString);
+        await sendCommand(DeviceCommandValues.SAVE_TO_FLASH);
+      }
+
+      let authOk = true;
+      if (imported.ps4Auth && isConnected) {
+        authOk = await uploadPs4Auth(imported.ps4Auth);
+      }
+
+      setConfig(nextConfig);
+      setSavedConfig(nextConfig);
+      setLastCommittedConfig(nextConfig);
+      setHistory([]);
+      setFuture([]);
+
+      return authOk;
     } catch (err) {
       console.error("Failed to import config:", err);
       return false;
     }
-  }, [lastCommittedConfig]);
+  }, [config, isConnected, clearBuffer, sendCommand, uploadPs4Auth]);
 
   const updatePadThreshold = useCallback(
     (pad: PadName, field: keyof PadThresholds, value: number, commit = true): void => {
@@ -327,7 +431,7 @@ export function useDeviceConfig({
           },
         };
         if (commit) {
-            handleCommit(next);
+          handleCommit(next);
         }
         return next;
       });
@@ -346,7 +450,7 @@ export function useDeviceConfig({
           },
         };
         if (commit) {
-            handleCommit(next);
+          handleCommit(next);
         }
         return next;
       });
@@ -361,7 +465,7 @@ export function useDeviceConfig({
         doubleInputMode: enabled,
       };
       if (commit) {
-          handleCommit(next);
+        handleCommit(next);
       }
       return next;
     });
@@ -383,7 +487,7 @@ export function useDeviceConfig({
           },
         };
         if (commit) {
-            handleCommit(next);
+          handleCommit(next);
         }
         return next;
       });
@@ -404,7 +508,7 @@ export function useDeviceConfig({
           },
         };
         if (commit) {
-            handleCommit(next);
+          handleCommit(next);
         }
         return next;
       });
@@ -430,6 +534,9 @@ export function useDeviceConfig({
     resetADCChannels,
     exportConfig,
     importConfig,
+    uploadPs4Auth,
+    clearPs4Auth,
+    readPs4AuthStatus,
     updatePadThreshold,
     updateTiming,
     setDoubleInputMode,

@@ -71,7 +71,7 @@ export function EmergencyRecoveryModal({ open, onOpenChange }: EmergencyRecovery
     setError(null);
 
     if (isConnected && backupEnabled) {
-      exportConfig();
+      await exportConfig();
     }
 
     try {
