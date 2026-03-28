@@ -45,11 +45,11 @@ export function FirmwareUpdateModal() {
     setModalOpen(open);
   };
 
-  const handleStartUpdate = () => {
+  const handleStartUpdate = async () => {
     if (backupEnabled) {
-      exportConfig();
+      await exportConfig();
     }
-    installUpdate();
+    await installUpdate();
   };
 
   return (

@@ -15,6 +15,7 @@ import {
   type PadBuffers,
   type KeyMappings,
   type ADCChannels,
+  type PS4AuthBackupData,
 } from "@/types";
 
 interface DeviceContextValue {
@@ -46,8 +47,11 @@ interface DeviceContextValue {
   setDoubleInputMode: (enabled: boolean) => void;
   updateKeyMapping: (category: keyof KeyMappings, key: string, value: number) => void;
   updateADCChannel: (pad: keyof ADCChannels, channel: number) => void;
-  exportConfig: () => void;
+  exportConfig: () => Promise<void>;
   importConfig: (file: File) => Promise<boolean>;
+  uploadPs4Auth: (authData: PS4AuthBackupData) => Promise<boolean>;
+  clearPs4Auth: () => Promise<boolean>;
+  readPs4AuthStatus: () => Promise<boolean>;
   rebootToBootsel: () => Promise<void>;
   uploadBootScreen: (data: Uint8Array) => Promise<boolean>;
   clearBootScreen: () => Promise<boolean>;
@@ -91,6 +95,7 @@ export function DeviceProvider({ children }: DeviceProviderProps) {
 
   const deviceConfig = useDeviceConfig({
     sendCommand: serial.sendCommand,
+    sendBinary: serial.sendBinary,
     readUntilTimeout: serial.readUntilTimeout,
     clearBuffer: serial.clearBuffer,
     isConnected,
@@ -288,6 +293,9 @@ export function DeviceProvider({ children }: DeviceProviderProps) {
       updateADCChannel: deviceConfig.updateADCChannel,
       exportConfig: deviceConfig.exportConfig,
       importConfig: deviceConfig.importConfig,
+      uploadPs4Auth: deviceConfig.uploadPs4Auth,
+      clearPs4Auth: deviceConfig.clearPs4Auth,
+      readPs4AuthStatus: deviceConfig.readPs4AuthStatus,
       rebootToBootsel,
       uploadBootScreen,
       clearBootScreen,
@@ -323,6 +331,7 @@ export function DeviceProvider({ children }: DeviceProviderProps) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useDevice(): DeviceContextValue {
   const context = useContext(DeviceContext);
   if (!context) {
