@@ -20,14 +20,14 @@ function Step1HoldButtons({ active }: StepProps) {
   return (
     <div className="flex flex-col items-center gap-4">
       <p className="text-sm text-muted-foreground text-center">
-        Step 1 — Hold <strong>START</strong> + <strong>SELECT</strong> for 2 seconds
+        Step 1 — Hold <strong>+</strong> and <strong>-</strong> for 2 seconds
       </p>
       <div className="flex gap-4">
-        {["START", "SELECT"].map((label) => (
+        {["+", "-"].map((label) => (
           <div
             key={label}
             className={`
-              flex items-center justify-center w-20 h-10 rounded-full border-2 text-xs font-bold
+              flex items-center justify-center w-20 h-10 rounded-full border-2 text-xl font-bold
               transition-all duration-300
               ${active ? "border-amber-500 bg-amber-500/20 text-amber-600 scale-110 shadow-lg shadow-amber-500/30" : "border-muted text-muted-foreground"}
             `}
