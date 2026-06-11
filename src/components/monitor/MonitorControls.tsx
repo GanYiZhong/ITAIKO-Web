@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Play, Pause, Trash2 } from "lucide-react";
 
 export function MonitorControls() {
+  const { t } = useTranslation("monitor");
   const {
     isConnected,
     isStreaming,
@@ -33,12 +35,12 @@ export function MonitorControls() {
             {isStreaming ? (
               <>
                 <Pause className="h-4 w-4 mr-2" />
-                Pause
+                {t("controls.pause")}
               </>
             ) : (
               <>
                 <Play className="h-4 w-4 mr-2" />
-                Resume
+                {t("controls.resume")}
               </>
             )}
           </Button>
@@ -48,7 +50,7 @@ export function MonitorControls() {
             onClick={clearData}
           >
             <Trash2 className="h-4 w-4 mr-2" />
-            Clear
+            {t("controls.clear")}
           </Button>
         </div>
       </CardContent>

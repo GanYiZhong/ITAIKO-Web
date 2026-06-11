@@ -1,0 +1,15 @@
+{
+  "serial": {
+    "notSupported": "WebSerial is not supported",
+    "noPortSelected": "No port selected",
+    "connectionFailed": "Connection failed",
+    "notConnected": "Not connected",
+    "deviceDisconnected": "Device disconnected"
+  },
+  "firmware": {
+    "fetchVersionFailed": "Failed to fetch firmware version",
+    "downloadFailed": "Download failed: {{status}} {{statusText}}",
+    "updateFailed": "Update failed",
+    "unknownError": "Unknown error"
+  }
+}

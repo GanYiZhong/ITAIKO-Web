@@ -1,0 +1,14 @@
+{
+  "controls": {
+    "pause": "暫停",
+    "resume": "繼續",
+    "clear": "清除"
+  },
+  "padGraph": {
+    "resetZoom": "重置"
+  },
+  "hitHistory": {
+    "title": "輸入歷史紀錄",
+    "clear": "清除"
+  }
+}

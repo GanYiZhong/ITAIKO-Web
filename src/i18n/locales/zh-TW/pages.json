@@ -1,0 +1,42 @@
+{
+  "landing": {
+    "hero": {
+      "subtitle": "直接在瀏覽器中設定並校準您的太鼓控制器。",
+      "badgeWebserial": "WebSerial",
+      "badgeRealtime": "即時監控",
+      "badgeNoDownload": "免下載"
+    },
+    "cta": {
+      "configure": "開始設定太鼓"
+    },
+    "features": {
+      "liveMonitor": {
+        "title": "即時監控",
+        "description": "透過 GPU 加速的圖表，即時視覺化感測器數據"
+      },
+      "easyConfig": {
+        "title": "輕鬆設定",
+        "description": "以直覺操作調整閾值與時序設定"
+      },
+      "visualFeedback": {
+        "title": "視覺回饋",
+        "description": "打擊時即時點亮對應的鼓面區域"
+      }
+    },
+    "footer": {
+      "browserRequirement": "需使用 Chrome、Edge、Opera 或安裝 WebSerial 擴充功能的 Firefox"
+    }
+  },
+  "configure": {
+    "header": {
+      "logoAlt": "Logo"
+    },
+    "advanced": {
+      "label": "進階"
+    },
+    "tabs": {
+      "config": "設定",
+      "monitor": "即時監控"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "serial": {
+    "notSupported": "不支援 WebSerial",
+    "noPortSelected": "未選擇序列埠",
+    "connectionFailed": "連線失敗",
+    "notConnected": "未連線",
+    "deviceDisconnected": "裝置已中斷連線"
+  },
+  "firmware": {
+    "fetchVersionFailed": "無法取得韌體版本",
+    "downloadFailed": "下載失敗：{{status}} {{statusText}}",
+    "updateFailed": "更新失敗",
+    "unknownError": "未知錯誤"
+  }
+}

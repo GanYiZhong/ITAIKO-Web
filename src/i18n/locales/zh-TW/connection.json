@@ -1,0 +1,158 @@
+{
+  "connectionPanel": {
+    "notSupported": {
+      "title": "不支援 WebSerial",
+      "description": "請使用 Chrome、Edge 或 Opera 來設定您的太鼓。"
+    },
+    "deviceConnection": "裝置連線",
+    "status": {
+      "connected": "已連線",
+      "connecting": "連線中...",
+      "error": "錯誤",
+      "disconnected": "未連線"
+    },
+    "emergencyRecoveryTitle": "緊急救援 - 清除並重新燒錄",
+    "connect": "連線",
+    "disconnect": "中斷連線"
+  },
+  "headerConnectionStatus": {
+    "firefoxExtensionRequired": "Firefox 需要安裝擴充功能才能使用 WebSerial",
+    "notSupported": "不支援 WebSerial",
+    "firefoxExtensionLink": "若要在 Firefox 中設定太鼓，請安裝 WebSerial 擴充功能",
+    "emergencyRecovery": "緊急救援",
+    "connect": "連線",
+    "disconnect": "中斷連線"
+  },
+  "firmwareUpdatePanel": {
+    "updateAvailable": "有新版本 v{{version}} 可供更新",
+    "updateButton": "更新"
+  },
+  "firmwareUpdateModal": {
+    "title": "韌體更新",
+    "description": {
+      "available": "版本 {{version}} 已可更新。",
+      "availableNoVersion": "有新版本可供更新。",
+      "idle": "檢查韌體更新。",
+      "complete": "更新成功！"
+    },
+    "howItWorks": {
+      "heading": "更新流程：",
+      "step1": "下載更新檔案。",
+      "step2": "裝置將重新啟動進入 bootloader 模式。",
+      "step3": "畫面會出現「儲存檔案」對話框，請將檔案儲存到「RPI-RP2」磁碟機。"
+    },
+    "backup": {
+      "label": "更新前備份設定",
+      "hint": "若有儲存 PS4 認證金鑰，可能需要幾秒鐘。"
+    },
+    "progress": {
+      "waitingForDevice": "等待裝置重新啟動進入 bootloader 模式...",
+      "flashingPrompt": "請將檔案儲存到「RPI-RP2」磁碟機。",
+      "writingWarning": "正在將韌體寫入裝置，請勿拔除！"
+    },
+    "manualAction": {
+      "fileDownloaded": "檔案已下載",
+      "intro": "韌體檔案已下載到您的電腦。",
+      "step1": "找到已下載的檔案。",
+      "step2": "將檔案拖放到「RPI-RP2」磁碟機。",
+      "step3": "完成後裝置將自動重新啟動。"
+    },
+    "complete": {
+      "heading": "更新完成！",
+      "description": "裝置已更新完畢，正在重新啟動。"
+    },
+    "error": {
+      "title": "更新失敗",
+      "unknown": "發生未知錯誤。"
+    },
+    "buttons": {
+      "cancel": "取消",
+      "startUpdate": "開始更新",
+      "exportingBackup": "正在匯出備份...",
+      "close": "關閉",
+      "updating": "更新中..."
+    }
+  },
+  "emergencyRecovery": {
+    "title": "緊急救援",
+    "description": {
+      "idle": "完整清除並重新燒錄控制器。",
+      "complete": "救援完成！",
+      "followSteps": "請依照以下步驟操作。"
+    },
+    "warning": {
+      "title": "警告：此操作將清除裝置所有資料！",
+      "description": "緊急救援程序將完整清除控制器上的所有資料，包含設定與校準值。僅在裝置變磚或一般韌體更新失敗時才使用此功能。"
+    },
+    "backup": {
+      "label": "清除前備份設定"
+    },
+    "deviceNotConnected": {
+      "message": "裝置未連線：",
+      "instructions": "請確認裝置已進入 bootloader 模式（RPI-RP2 磁碟機應已出現）再繼續。",
+      "bootselHint": "按住 1 再按住 2，待控制器中斷連線後，先放開 1 再放開 2。此時電腦上應會出現 RPI-RP2 磁碟機。"
+    },
+    "recoveryProcess": {
+      "heading": "救援流程：",
+      "stepReboot": "裝置將重新啟動進入 bootloader 模式",
+      "stepNuke": "您需要儲存「flash nuke」檔案以清除裝置",
+      "stepRebootAfterWipe": "清除後裝置將再次重新啟動",
+      "stepFirmware": "您需要儲存最新韌體以還原功能"
+    },
+    "steps": {
+      "rebooting": "正在重新啟動裝置進入 bootloader 模式...",
+      "readyToNuke": {
+        "title": "步驟一：將 flash nuke 檔案儲存到 RPI-RP2 磁碟機",
+        "description": "此操作將完整清除裝置，請確認儲存到正確的磁碟機！"
+      },
+      "nuking": "正在儲存 flash nuke 檔案...",
+      "confirmNuke": {
+        "fileDownloaded": "檔案已下載",
+        "intro": "<strong>flash_nuke.uf2</strong> 檔案已下載到您的電腦。",
+        "step1": "找到已下載的檔案。",
+        "step2": "將檔案拖放到「RPI-RP2」磁碟機。",
+        "step3": "裝置將立即中斷連線並重新啟動。",
+        "clickContinue": "拖放完成後請點選「繼續」。"
+      },
+      "waitingAfterNuke": {
+        "wiping": "等待裝置清除完畢並重新啟動...",
+        "downloading": "正在背景下載最新韌體..."
+      },
+      "readyToFlash": {
+        "title": "步驟二：將韌體檔案儲存到 RPI-RP2 磁碟機",
+        "description": "裝置已清除完畢，現在請儲存韌體以還原功能。"
+      },
+      "flashing": "正在儲存韌體檔案...",
+      "confirmFlash": {
+        "fileDownloaded": "檔案已下載",
+        "intro": "韌體檔案已下載到您的電腦。",
+        "step1": "找到已下載的檔案。",
+        "step2": "將檔案拖放到「RPI-RP2」磁碟機。",
+        "step3": "裝置將重新啟動進入應用程式模式。",
+        "clickDone": "拖放完成後請點選「完成」。"
+      }
+    },
+    "complete": {
+      "heading": "救援完成！",
+      "description": "裝置已清除並重新燒錄完畢，請手動重新連線裝置。"
+    },
+    "error": {
+      "title": "救援失敗",
+      "unknown": "發生未知錯誤。",
+      "tryAgainHint": "您可以再試一次，或從 GitHub releases 頁面手動下載檔案。"
+    },
+    "buttons": {
+      "cancel": "取消",
+      "startRecovery": "開始救援",
+      "startRecoveryBootsel": "開始救援（裝置已在 Bootsel 模式）",
+      "exportingBackup": "正在匯出備份...",
+      "saveFlashNuke": "儲存 Flash Nuke",
+      "saveFirmware": "儲存韌體",
+      "continue": "繼續",
+      "done": "完成",
+      "close": "關閉",
+      "tryAgain": "重試",
+      "recoveryInProgress": "救援進行中..."
+    }
+  }
+}

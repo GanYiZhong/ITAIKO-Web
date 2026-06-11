@@ -1,0 +1,105 @@
+{
+  "globalSettings": {
+    "title": "全域設定",
+    "description": "影響整個鼓面運作行為的設定。",
+    "allowDoubleInputs": {
+      "heading": "允許雙重輸入",
+      "body": "啟用此選項後，可以更用力敲擊兩側鼓面，並觸發大音符。使用此功能需要在鼓面閾值中設定重擊觸發值。"
+    }
+  },
+  "padThresholds": {
+    "title": "鼓面閾值",
+    "description": "設定每個鼓面的靈敏度與觸發等級。",
+    "lightTrigger": {
+      "heading": "輕觸發值",
+      "body": "敲擊鼓面需達到的力道才能觸發音符。這是最重要的設定項目。"
+    },
+    "heavyTrigger": {
+      "heading": "重觸發值",
+      "body": "此欄位僅在全域設定中啟用「允許雙重輸入」後才會出現。此閾值決定鼓面受到的敲擊是否能繞過去彈跳並觸發大音符。"
+    },
+    "cutoff": {
+      "heading": "截止值",
+      "warning": "請先在即時監視器中確認確實存在此問題，再將此滑桿設定為低於 4095 的數值。",
+      "body": "此設定用於處理用力敲擊某個鼓面時導致另一個無關鼓面出現尖峰訊號的情況。我們發現部分電路板上的電流可能會洩漏至其他接腳的類比輸入，造成誤讀。截止值滑桿可讓超過此閾值的敲擊訊號被立即忽略。"
+    }
+  },
+  "timingSettings": {
+    "title": "時序設定",
+    "description": "設定擊打偵測的相關時序參數。",
+    "debounceTime": {
+      "heading": "去彈跳時間",
+      "body": "說明文件即將推出..."
+    },
+    "sampleCount": {
+      "heading": "取樣數量",
+      "body": "說明文件即將推出..."
+    }
+  },
+  "adcChannels": {
+    "title": "ADC 通道對應",
+    "description": "將實體 ADC 通道對應至各鼓面。",
+    "whatAreAdcChannels": {
+      "heading": "什麼是 ADC 通道？",
+      "body": "說明文件即將推出..."
+    },
+    "channelAssignment": {
+      "heading": "通道指定",
+      "body": "說明文件即將推出..."
+    }
+  },
+  "keyMappings": {
+    "title": "按鍵對應",
+    "description": "設定敲擊鼓面時發送的按鍵。",
+    "gamepadButtons": {
+      "heading": "遊戲手把按鍵",
+      "body": "說明文件即將推出..."
+    },
+    "keyboardKeys": {
+      "heading": "鍵盤按鍵",
+      "body": "說明文件即將推出..."
+    }
+  },
+  "bootScreen": {
+    "title": "開機畫面",
+    "description": "自訂控制器的啟動畫面。",
+    "imageRequirements": {
+      "heading": "圖片需求",
+      "intro": "圖片將被轉換為 128x64 像素的 1-bit 單色（黑白）點陣圖。",
+      "formatItem": "支援格式：PNG、JPG、BMP",
+      "aspectRatioItem": "最佳長寬比：2:1",
+      "colorsItem": "色彩：將以抖色或閾值化方式轉為黑白"
+    },
+    "howToUse": {
+      "heading": "使用方式",
+      "step1": "1. 選擇圖片檔案。",
+      "step2": "2. 預覽單色轉換結果。",
+      "step3": "3. 點選「上傳至裝置」以燒錄新圖片。",
+      "step4": "4. 下次插入裝置時，新的開機畫面將會出現。"
+    },
+    "restoringDefault": {
+      "heading": "還原預設值",
+      "body": "點選垃圾桶圖示以清除自訂圖片，並還原原始 ITAIKO 標誌。"
+    }
+  },
+  "liveMonitor": {
+    "title": "即時監視器",
+    "description": "鼓面輸入的即時視覺化顯示。",
+    "graphDisplay": {
+      "heading": "圖形顯示",
+      "body": "說明文件即將推出..."
+    },
+    "triggerIndicators": {
+      "heading": "觸發指示器",
+      "body": "說明文件即將推出..."
+    }
+  },
+  "visualDrum": {
+    "title": "視覺化鼓面",
+    "description": "鼓面敲擊的視覺化呈現。",
+    "howToUse": {
+      "heading": "使用方式",
+      "body": "說明文件即將推出..."
+    }
+  }
+}

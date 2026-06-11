@@ -1,9 +1,11 @@
 import { useLayoutEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { PAD_COLORS, PAD_NAMES, PAD_LABELS, type PadName } from "@/types";
+import { PAD_COLORS, PAD_NAMES, type PadName } from "@/types";
+import { usePadLabels } from "@/i18n/pad-labels";
 import { cn } from "@/lib/utils";
 
 const HISTORY_LENGTH = 20;
@@ -14,6 +16,8 @@ type HistoryEvent = {
 };
 
 export function HitHistoryGrid() {
+  const { t } = useTranslation("monitor");
+  const padLabels = usePadLabels();
   const { triggers } = useDevice();
   // History is an array of "events", where each event is a list of pads hit simultaneously
   const [history, setHistory] = useState<HistoryEvent[]>([]);
@@ -56,10 +60,10 @@ export function HitHistoryGrid() {
   return (
     <Card className="border-none bg-transparent shadow-none">
       <CardHeader className="flex flex-row items-center justify-between py-2 px-0">
-        <CardTitle className="text-base">Input History</CardTitle>
+        <CardTitle className="text-base">{t("hitHistory.title")}</CardTitle>
         <Button variant="ghost" size="sm" onClick={clearHistory}>
           <Trash2 className="h-4 w-4 mr-2" />
-          Clear
+          {t("hitHistory.clear")}
         </Button>
       </CardHeader>
       <CardContent className="overflow-x-auto px-0">
@@ -67,7 +71,7 @@ export function HitHistoryGrid() {
            {PAD_NAMES.map(padRow => (
              <div key={padRow} className="flex items-center gap-2">
                <div className="w-20 text-xs font-medium text-muted-foreground shrink-0">
-                 {PAD_LABELS[padRow]}
+                 {padLabels[padRow]}
                </div>
                <div className="flex-1 flex gap-1">
                  {Array.from({ length: HISTORY_LENGTH }).map((_, colIndex) => {

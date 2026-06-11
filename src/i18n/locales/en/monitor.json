@@ -1,0 +1,14 @@
+{
+  "controls": {
+    "pause": "Pause",
+    "resume": "Resume",
+    "clear": "Clear"
+  },
+  "padGraph": {
+    "resetZoom": "Reset"
+  },
+  "hitHistory": {
+    "title": "Input History",
+    "clear": "Clear"
+  }
+}

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +9,7 @@ import { toast } from "sonner";
 import { EmergencyRecoveryModal } from "./EmergencyRecoveryModal";
 
 export function ConnectionPanel() {
+  const { t } = useTranslation("connection");
   const {
     status,
     error,
@@ -45,9 +47,9 @@ export function ConnectionPanel() {
         <CardContent className="flex items-center gap-3 py-4">
           <AlertCircle className="h-5 w-5 text-destructive" />
           <div className="flex-1">
-            <p className="font-medium">WebSerial Not Supported</p>
+            <p className="font-medium">{t("connectionPanel.notSupported.title")}</p>
             <p className="text-sm text-muted-foreground">
-              Please use Chrome, Edge, or Opera to configure your drum.
+              {t("connectionPanel.notSupported.description")}
             </p>
           </div>
         </CardContent>
@@ -63,7 +65,7 @@ export function ConnectionPanel() {
         <div className="flex-1">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
-              <span className="font-medium">Device Connection</span>
+              <span className="font-medium">{t("connectionPanel.deviceConnection")}</span>
               <Badge
                 variant={
                   status === "connected"
@@ -76,12 +78,12 @@ export function ConnectionPanel() {
                 }
               >
                 {status === "connected"
-                  ? "Connected"
+                  ? t("connectionPanel.status.connected")
                   : status === "connecting"
-                    ? "Connecting..."
+                    ? t("connectionPanel.status.connecting")
                     : status === "error"
-                      ? "Error"
-                      : "Disconnected"}
+                      ? t("connectionPanel.status.error")
+                      : t("connectionPanel.status.disconnected")}
               </Badge>
               {isConnected && config.firmwareVersion && (
                 <span className="text-xs text-muted-foreground font-mono border rounded px-1.5 py-0.5 bg-muted/50">
@@ -96,7 +98,7 @@ export function ConnectionPanel() {
           variant="destructive"
           size="icon"
           onClick={() => setRecoveryModalOpen(true)}
-          title="Emergency Recovery - Wipe and Reflash"
+          title={t("connectionPanel.emergencyRecoveryTitle")}
           className="bg-red-600 hover:bg-red-700 border-red-800"
         >
           <Skull className="h-4 w-4" />
@@ -107,7 +109,7 @@ export function ConnectionPanel() {
           variant={isConnected ? "outline" : "default"}
           disabled={status === "connecting"}
         >
-          {isConnected ? "Disconnect" : "Connect"}
+          {isConnected ? t("connectionPanel.disconnect") : t("connectionPanel.connect")}
         </Button>
       </CardContent>
 

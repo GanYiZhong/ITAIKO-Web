@@ -1,10 +1,12 @@
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { NumberInput } from "@/components/ui/numberinput";
 import type { PadName } from "@/types";
-import { PAD_LABELS, PAD_COLORS } from "@/types";
+import { PAD_COLORS } from "@/types";
+import { usePadLabels } from "@/i18n/pad-labels";
 import { THRESHOLD_MIN, THRESHOLD_MAX } from "@/lib/default-config";
 
 interface PadConfigGroupProps {
@@ -71,6 +73,8 @@ function PadThresholdSetting({
 }
 
 export function PadConfigGroup({ pad, simpleMode = false }: PadConfigGroupProps) {
+  const { t } = useTranslation("config");
+  const padLabels = usePadLabels();
   const { config, updatePadThreshold, isConnected } = useDevice();
   const thresholds = config.pads[pad];
   const showHeavy = config.doubleInputMode && !simpleMode;
@@ -83,13 +87,13 @@ export function PadConfigGroup({ pad, simpleMode = false }: PadConfigGroupProps)
             className="w-3 h-3 rounded-full"
             style={{ backgroundColor: PAD_COLORS[pad] }}
           />
-          {PAD_LABELS[pad]}
+          {padLabels[pad]}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Light Threshold */}
         <PadThresholdSetting
-          label="Light Trigger"
+          label={t("padConfig.lightTrigger")}
           id={`${pad}-light`}
           value={thresholds.light}
           onChange={(val, commit) => updatePadThreshold(pad, "light", val, commit)}
@@ -99,7 +103,7 @@ export function PadConfigGroup({ pad, simpleMode = false }: PadConfigGroupProps)
         {/* Heavy Threshold (only when double mode enabled) */}
         {showHeavy && (
           <PadThresholdSetting
-            label="Heavy Trigger"
+            label={t("padConfig.heavyTrigger")}
             id={`${pad}-heavy`}
             value={thresholds.heavy}
             onChange={(val, commit) => updatePadThreshold(pad, "heavy", val, commit)}
@@ -110,7 +114,7 @@ export function PadConfigGroup({ pad, simpleMode = false }: PadConfigGroupProps)
         {/* Cutoff Threshold - Advanced only */}
         {!simpleMode && (
           <PadThresholdSetting
-            label="Cutoff"
+            label={t("padConfig.cutoff")}
             id={`${pad}-cutoff`}
             value={thresholds.cutoff}
             onChange={(val, commit) => updatePadThreshold(pad, "cutoff", val, commit)}

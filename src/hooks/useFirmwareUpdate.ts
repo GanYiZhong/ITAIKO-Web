@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { compareVersions } from '../lib/utils';
 import { useSearchParams } from 'react-router-dom';
+import i18n from "@/i18n";
 
 export interface FirmwareInfo {
   version: string;
@@ -34,7 +35,7 @@ export function useFirmwareUpdate(currentVersion?: string) {
       // Fetch version from local firmware folder
       const response = await fetch('/firmware/version.txt');
       if (!response.ok) {
-        throw new Error('Failed to fetch firmware version');
+        throw new Error(i18n.t("firmware.fetchVersionFailed", { ns: "messages" }));
       }
       const latestVersion = (await response.text()).trim();
 
@@ -52,7 +53,7 @@ export function useFirmwareUpdate(currentVersion?: string) {
       }
     } catch (err) {
       console.error('Error checking for firmware update:', err);
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      setError(err instanceof Error ? err.message : i18n.t("firmware.unknownError", { ns: "messages" }));
       setStatus('idle');
     }
   }, [currentVersion, forceUpdate]);
@@ -75,7 +76,7 @@ export function useFirmwareUpdate(currentVersion?: string) {
       setProgress(0);
 
       const response = await fetch(latestFirmware.firmwareUrl);
-      if (!response.ok) throw new Error(`Download failed: ${response.status} ${response.statusText}`);
+      if (!response.ok) throw new Error(i18n.t("firmware.downloadFailed", { ns: "messages", status: response.status, statusText: response.statusText }));
       blob = await response.blob();
       setProgress(30);
 
@@ -130,7 +131,7 @@ export function useFirmwareUpdate(currentVersion?: string) {
 
     } catch (err) {
       console.error('Update failed:', err);
-      setError(err instanceof Error ? err.message : 'Update failed');
+      setError(err instanceof Error ? err.message : i18n.t("firmware.updateFailed", { ns: "messages" }));
       setStatus('error');
     }
   }, [latestFirmware]);

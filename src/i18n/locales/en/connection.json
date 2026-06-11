@@ -1,0 +1,158 @@
+{
+  "connectionPanel": {
+    "notSupported": {
+      "title": "WebSerial Not Supported",
+      "description": "Please use Chrome, Edge, or Opera to configure your drum."
+    },
+    "deviceConnection": "Device Connection",
+    "status": {
+      "connected": "Connected",
+      "connecting": "Connecting...",
+      "error": "Error",
+      "disconnected": "Disconnected"
+    },
+    "emergencyRecoveryTitle": "Emergency Recovery - Wipe and Reflash",
+    "connect": "Connect",
+    "disconnect": "Disconnect"
+  },
+  "headerConnectionStatus": {
+    "firefoxExtensionRequired": "Firefox requires an extension for WebSerial",
+    "notSupported": "WebSerial not supported",
+    "firefoxExtensionLink": "To configure your drum with Firefox, please install the WebSerial extension",
+    "emergencyRecovery": "Emergency Recovery",
+    "connect": "Connect",
+    "disconnect": "Disconnect"
+  },
+  "firmwareUpdatePanel": {
+    "updateAvailable": "Update v{{version}} available",
+    "updateButton": "Update"
+  },
+  "firmwareUpdateModal": {
+    "title": "Firmware Update",
+    "description": {
+      "available": "Version {{version}} is available.",
+      "availableNoVersion": "New version available.",
+      "idle": "Check for firmware updates.",
+      "complete": "Update successful!"
+    },
+    "howItWorks": {
+      "heading": "How it works:",
+      "step1": "The update file will be downloaded.",
+      "step2": "Your device will reboot into bootloader mode.",
+      "step3": "A \"Save File\" dialog will appear. Save the file to the \"RPI-RP2\" drive."
+    },
+    "backup": {
+      "label": "Backup configuration before updating",
+      "hint": "May take a few seconds if a PS4 auth key is stored."
+    },
+    "progress": {
+      "waitingForDevice": "Waiting for device to reboot into bootloader mode...",
+      "flashingPrompt": "Please save the file to the \"RPI-RP2\" drive.",
+      "writingWarning": "Copying firmware to device. Do not unplug!"
+    },
+    "manualAction": {
+      "fileDownloaded": "File downloaded",
+      "intro": "The firmware file has been downloaded to your computer.",
+      "step1": "Locate the downloaded file.",
+      "step2": "Drag and drop the file onto the \"RPI-RP2\" drive.",
+      "step3": "The device will automatically reboot when finished."
+    },
+    "complete": {
+      "heading": "Update Complete!",
+      "description": "Your device has been updated and is rebooting."
+    },
+    "error": {
+      "title": "Update Failed",
+      "unknown": "An unknown error occurred."
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "startUpdate": "Start Update",
+      "exportingBackup": "Exporting backup...",
+      "close": "Close",
+      "updating": "Updating..."
+    }
+  },
+  "emergencyRecovery": {
+    "title": "Emergency Recovery",
+    "description": {
+      "idle": "Complete wipe and reflash of your controller.",
+      "complete": "Recovery complete!",
+      "followSteps": "Follow the steps below."
+    },
+    "warning": {
+      "title": "Warning: This will wipe your device!",
+      "description": "This emergency recovery process will completely erase all data on your controller, including settings and calibration. Only use this if your device is bricked or a normal firmware update failed."
+    },
+    "backup": {
+      "label": "Backup configuration before wiping"
+    },
+    "deviceNotConnected": {
+      "message": "Device not connected:",
+      "instructions": "Make sure your device is already in bootloader mode (RPI-RP2 drive should be visible) before proceeding.",
+      "bootselHint": "Hold 1 then hold 2. Once the controller disconnects, release 1 then 2. A RPI-RP2 drive should appear on your computer."
+    },
+    "recoveryProcess": {
+      "heading": "Recovery process:",
+      "stepReboot": "Device will reboot into bootloader mode",
+      "stepNuke": "You'll save a \"flash nuke\" file to wipe the device",
+      "stepRebootAfterWipe": "Device will reboot again after wipe",
+      "stepFirmware": "You'll save the latest firmware to restore functionality"
+    },
+    "steps": {
+      "rebooting": "Rebooting device into bootloader mode...",
+      "readyToNuke": {
+        "title": "Step 1: Save the flash nuke file to the RPI-RP2 drive",
+        "description": "This will completely wipe the device. Make sure to save it to the correct drive!"
+      },
+      "nuking": "Saving flash nuke file...",
+      "confirmNuke": {
+        "fileDownloaded": "File downloaded",
+        "intro": "The <strong>flash_nuke.uf2</strong> file has been downloaded to your computer.",
+        "step1": "Locate the downloaded file.",
+        "step2": "Drag and drop it onto the \"RPI-RP2\" drive.",
+        "step3": "The device will disconnect and reboot immediately.",
+        "clickContinue": "Click Continue after dragging the file."
+      },
+      "waitingAfterNuke": {
+        "wiping": "Waiting for device to wipe and reboot...",
+        "downloading": "Downloading latest firmware in the background..."
+      },
+      "readyToFlash": {
+        "title": "Step 2: Save the firmware file to the RPI-RP2 drive",
+        "description": "The device has been wiped. Now save the firmware to restore it."
+      },
+      "flashing": "Saving firmware file...",
+      "confirmFlash": {
+        "fileDownloaded": "File downloaded",
+        "intro": "The firmware file has been downloaded to your computer.",
+        "step1": "Locate the downloaded file.",
+        "step2": "Drag and drop it onto the \"RPI-RP2\" drive.",
+        "step3": "The device will reboot into application mode.",
+        "clickDone": "Click Done after dragging the file."
+      }
+    },
+    "complete": {
+      "heading": "Recovery Complete!",
+      "description": "Your device has been wiped and reflashed. Please reconnect to your device manually."
+    },
+    "error": {
+      "title": "Recovery Failed",
+      "unknown": "An unknown error occurred.",
+      "tryAgainHint": "You can try again or manually download the files from the GitHub releases page."
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "startRecovery": "Start Recovery",
+      "startRecoveryBootsel": "Start Recovery (Device in Bootsel)",
+      "exportingBackup": "Exporting backup...",
+      "saveFlashNuke": "Save Flash Nuke",
+      "saveFirmware": "Save Firmware",
+      "continue": "Continue",
+      "done": "Done",
+      "close": "Close",
+      "tryAgain": "Try Again",
+      "recoveryInProgress": "Recovery in progress..."
+    }
+  }
+}

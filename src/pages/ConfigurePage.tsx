@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DeviceProvider } from "@/context/DeviceContext";
 import { HeaderConnectionStatus } from "@/components/connection/HeaderConnectionStatus";
@@ -8,12 +9,14 @@ import { ConfigurationTab } from "@/components/configuration/ConfigurationTab";
 import { LiveMonitorTab } from "@/components/monitor/LiveMonitorTab";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { initializeHelpContent } from "@/lib/help-content";
 
 // Initialize help content
 initializeHelpContent();
 
 function ConfigurePageContent() {
+  const { t } = useTranslation("pages");
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") || "config";
   const advancedMode = searchParams.get("advanced") === "true";
@@ -41,11 +44,12 @@ function ConfigurePageContent() {
       <header className="border-b w-full flex-shrink-0">
         <div className="flex h-14 items-center justify-between px-4 max-w-5xl mx-auto w-full">
           <Link to="/" className="font-bold text-xl shrink-0">
-            <img src="itaiko.png" className="pixelated drag-none" alt="Logo" />
+            <img src="itaiko.png" className="pixelated drag-none" alt={t("configure.header.logoAlt")} />
           </Link>
           <div className="flex items-center gap-4">
+            <LanguageSwitcher />
             <div className="flex items-center gap-2">
-              <Label htmlFor="advanced-mode" className="text-sm">Advanced</Label>
+              <Label htmlFor="advanced-mode" className="text-sm">{t("configure.advanced.label")}</Label>
               <Switch
                 id="advanced-mode"
                 checked={advancedMode}
@@ -70,7 +74,7 @@ function ConfigurePageContent() {
 
             {/* Tab Content */}
             <TabsContent value="config" className="mt-0">
-              
+
               <ConfigurationTab />
             </TabsContent>
 
@@ -82,8 +86,8 @@ function ConfigurePageContent() {
 
             {/* Tabs at bottom */}
             <TabsList className="grid w-full grid-cols-2 mt-6">
-              <TabsTrigger value="config">Configuration</TabsTrigger>
-              <TabsTrigger value="monitor">Live Monitor</TabsTrigger>
+              <TabsTrigger value="config">{t("configure.tabs.config")}</TabsTrigger>
+              <TabsTrigger value="monitor">{t("configure.tabs.monitor")}</TabsTrigger>
             </TabsList>
           </Tabs>
         </main>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,7 @@ function timestampForFilename(): string {
 }
 
 export function PS4AuthGenerator() {
+  const { t } = useTranslation("setup");
   const { isConnected, uploadPs4Auth, clearPs4Auth, readPs4AuthStatus, disconnect } = useDevice();
   const [keyPemFile, setKeyPemFile] = useState<File | null>(null);
   const [serialFile, setSerialFile] = useState<File | null>(null);
@@ -47,7 +49,7 @@ export function PS4AuthGenerator() {
 
   const generate = async () => {
     if (!keyPemFile || !serialFile || !signatureFile) {
-      setError("Please select key.pem, serial.txt, and sig.bin.");
+      setError(t("ps4AuthGenerator.errors.selectFiles"));
       return;
     }
 
@@ -73,7 +75,7 @@ export function PS4AuthGenerator() {
     } catch (err) {
       setGenerated(null);
       setDebugPreview("");
-      setError(err instanceof Error ? err.message : "Failed to generate PS4 auth data.");
+      setError(err instanceof Error ? err.message : t("ps4AuthGenerator.errors.generateFailed"));
     } finally {
       setIsGenerating(false);
     }
@@ -81,7 +83,7 @@ export function PS4AuthGenerator() {
 
   const checkDeviceStatus = async () => {
     if (!isConnected) {
-      setStatusMessage("Connect a device to check PS4 auth status.");
+      setStatusMessage(t("ps4AuthGenerator.errors.connectToCheck"));
       return;
     }
 
@@ -89,9 +91,9 @@ export function PS4AuthGenerator() {
     setError(null);
     try {
       const hasAuth = await readPs4AuthStatus();
-      setStatusMessage(hasAuth ? "Device status: PS4 auth is present." : "Device status: no PS4 auth stored.");
+      setStatusMessage(hasAuth ? t("ps4AuthGenerator.status.authPresent") : t("ps4AuthGenerator.status.authAbsent"));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to query PS4 auth status.");
+      setError(err instanceof Error ? err.message : t("ps4AuthGenerator.errors.queryFailed"));
     } finally {
       setIsUploading(false);
     }
@@ -99,11 +101,11 @@ export function PS4AuthGenerator() {
 
   const uploadToDevice = async () => {
     if (!generated) {
-      setError("Generate data first.");
+      setError(t("ps4AuthGenerator.errors.generateFirst"));
       return;
     }
     if (!isConnected) {
-      setError("Connect a device before uploading.");
+      setError(t("ps4AuthGenerator.errors.connectBeforeUpload"));
       return;
     }
 
@@ -112,13 +114,13 @@ export function PS4AuthGenerator() {
     try {
       const ok = await uploadPs4Auth(toBackupData(generated));
       if (ok) {
-        setStatusMessage("PS4 auth uploaded. Device is rebooting — reconnect when it comes back.");
+        setStatusMessage(t("ps4AuthGenerator.status.uploadedRebooting"));
         await disconnect();
       } else {
-        setError("Upload failed. Check serial connection and try again.");
+        setError(t("ps4AuthGenerator.errors.uploadFailed"));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload failed.");
+      setError(err instanceof Error ? err.message : t("ps4AuthGenerator.errors.uploadFailedGeneric"));
     } finally {
       setIsUploading(false);
     }
@@ -126,7 +128,7 @@ export function PS4AuthGenerator() {
 
   const clearDeviceAuth = async () => {
     if (!isConnected) {
-      setError("Connect a device before clearing PS4 auth.");
+      setError(t("ps4AuthGenerator.errors.connectBeforeClear"));
       return;
     }
 
@@ -135,13 +137,13 @@ export function PS4AuthGenerator() {
     try {
       const ok = await clearPs4Auth();
       if (ok) {
-        setStatusMessage("PS4 auth cleared. Device is rebooting — reconnect when it comes back.");
+        setStatusMessage(t("ps4AuthGenerator.status.clearedRebooting"));
         await disconnect();
       } else {
-        setError("Clear failed. Check serial connection and try again.");
+        setError(t("ps4AuthGenerator.errors.clearFailed"));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Clear failed.");
+      setError(err instanceof Error ? err.message : t("ps4AuthGenerator.errors.clearFailedGeneric"));
     } finally {
       setIsUploading(false);
     }
@@ -170,11 +172,13 @@ export function PS4AuthGenerator() {
       <CardHeader>
         <CardTitle className="text-base flex items-center gap-2">
           <ShieldCheck className="h-4 w-4" />
-          PS4 Auth Generator (Debug)
+          {t("ps4AuthGenerator.title")}
         </CardTitle>
         <CardDescription>
-          Upload <code>key.pem</code>, <code>serial.txt</code>, and <code>sig.bin</code> to generate canonical auth
-          bytes for comparison with <code>generateAuthConfig.py</code>, then upload them directly to the board.
+          <Trans i18nKey="ps4AuthGenerator.description" ns="setup">
+            Upload <code>key.pem</code>, <code>serial.txt</code>, and <code>sig.bin</code> to generate canonical auth
+            bytes for comparison with <code>generateAuthConfig.py</code>, then upload them directly to the board.
+          </Trans>
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -212,25 +216,25 @@ export function PS4AuthGenerator() {
 
         <div className="flex flex-wrap gap-2">
           <Button onClick={generate} disabled={!canGenerate || isUploading}>
-            {isGenerating ? "Generating..." : "Generate Debug Data"}
+            {isGenerating ? t("ps4AuthGenerator.buttons.generating") : t("ps4AuthGenerator.buttons.generate")}
           </Button>
           <Button variant="outline" onClick={downloadDebugOutput} disabled={!generated}>
             <Download className="h-4 w-4 mr-2" />
-            Download Output
+            {t("ps4AuthGenerator.buttons.downloadOutput")}
           </Button>
           <Button variant="secondary" onClick={uploadToDevice} disabled={!generated || !isConnected || isUploading}>
             <Upload className="h-4 w-4 mr-2" />
-            Upload To Device
+            {t("ps4AuthGenerator.buttons.uploadToDevice")}
           </Button>
           <Button variant="outline" onClick={checkDeviceStatus} disabled={!isConnected || isUploading}>
-            Check Device Status
+            {t("ps4AuthGenerator.buttons.checkDeviceStatus")}
           </Button>
           <Button variant="outline" onClick={clearDeviceAuth} disabled={!isConnected || isUploading}>
-            Clear Device Auth
+            {t("ps4AuthGenerator.buttons.clearDeviceAuth")}
           </Button>
           <Button variant="ghost" onClick={clearAll}>
             <RefreshCcw className="h-4 w-4 mr-2" />
-            Clear
+            {t("ps4AuthGenerator.buttons.clear")}
           </Button>
         </div>
 
@@ -249,26 +253,29 @@ export function PS4AuthGenerator() {
         {generated && (
           <div className="space-y-3">
             <div className="text-sm text-muted-foreground">
-              <span className="font-medium text-foreground">Generated:</span> serial {generated.serialBytes.length} bytes,
-              signature {generated.signatureBytes.length} bytes, key.pem {generated.keyPemText.length} chars.
+              {t("ps4AuthGenerator.output.generatedSummary", {
+                serialBytes: generated.serialBytes.length,
+                signatureBytes: generated.signatureBytes.length,
+                keyPemChars: generated.keyPemText.length,
+              })}
             </div>
 
             <div className="space-y-1">
-              <Label>Serial C Array (16 bytes)</Label>
+              <Label>{t("ps4AuthGenerator.output.serialCArray")}</Label>
               <pre className="rounded-md border bg-muted/40 p-3 text-xs overflow-x-auto">{`{ ${formatCArray(
                 generated.serialBytes
               )} }`}</pre>
             </div>
 
             <div className="space-y-1">
-              <Label>Signature C Array (256 bytes)</Label>
+              <Label>{t("ps4AuthGenerator.output.signatureCArray")}</Label>
               <pre className="rounded-md border bg-muted/40 p-3 text-xs overflow-auto max-h-64">{`{\n  ${formatCArrayWrapped(
                 generated.signatureBytes
               ).replace(/\n/g, "\n  ")}\n}`}</pre>
             </div>
 
             <div className="space-y-1">
-              <Label>key.pem</Label>
+              <Label>{t("ps4AuthGenerator.output.keyPem")}</Label>
               <pre className="rounded-md border bg-muted/40 p-3 text-xs overflow-auto max-h-56">{generated.keyPemText}</pre>
             </div>
           </div>

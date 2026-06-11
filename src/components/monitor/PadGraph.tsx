@@ -1,10 +1,12 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { WebglPlot, WebglLine, ColorRGBA } from "webgl-plot";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { RotateCcw } from "lucide-react";
 import type { PadName, PadBuffer } from "@/types";
-import { PAD_LABELS, PAD_COLORS } from "@/types";
+import { PAD_COLORS } from "@/types";
+import { usePadLabels } from "@/i18n/pad-labels";
 
 interface PadGraphProps {
   pad: PadName;
@@ -79,6 +81,8 @@ export function PadGraph({
   numPoints = 500,
   displayPoints = 500,
 }: PadGraphProps) {
+  const { t } = useTranslation("monitor");
+  const padLabels = usePadLabels();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const wglpRef = useRef<WebglPlot | null>(null);
@@ -405,12 +409,12 @@ export function PadGraph({
               className="w-2 h-2 rounded-full"
               style={{ backgroundColor: PAD_COLORS[pad] }}
             />
-            {PAD_LABELS[pad]}
+            {padLabels[pad]}
           </div>
           {isZoomed && (
             <Button size="sm" className="h-6 px-2 text-xs" onClick={resetZoom}>
               <RotateCcw className="h-3 w-3 mr-1" />
-              Reset
+              {t("padGraph.resetZoom")}
             </Button>
           )}
         </CardTitle>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -27,6 +28,7 @@ import { useSearchParams } from "react-router-dom";
 import { KeyboardModeHelperModal, shouldShowKeyboardHelper } from "./KeyboardModeHelperModal";
 
 export function ConfigurationTab() {
+  const { t } = useTranslation("config");
   const {
     config,
     setDoubleInputMode,
@@ -144,10 +146,10 @@ export function ConfigurationTab() {
         {!isReady && (
           <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
             <div className="bg-background/80 backdrop-blur-md px-6 py-3 rounded-2xl border shadow-sm text-center space-y-2">
-              <p className="text-lg font-semibold">Connect your drum</p>
-              <p className="text-xs text-muted-foreground">to start configuration</p>
+              <p className="text-lg font-semibold">{t("connectOverlay.connectYourDrum")}</p>
+              <p className="text-xs text-muted-foreground">{t("connectOverlay.toStartConfiguration")}</p>
               <p className="text-xs font-semibold text-amber-500 animate-pulse">
-                ⚠ Set the drum to Keyboard mode before connecting
+                {t("connectOverlay.setKeyboardMode")}
               </p>
             </div>
           </div>
@@ -164,16 +166,16 @@ export function ConfigurationTab() {
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                Global Settings
+                {t("globalSettings.title")}
                 <HelpButton helpKey="global-settings" />
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label htmlFor="double-mode">Allow Double Inputs</Label>
+                  <Label htmlFor="double-mode">{t("globalSettings.allowDoubleInputs")}</Label>
                   <p className="text-sm text-muted-foreground">
-                    Enable heavy trigger threshold for fast double hits
+                    {t("globalSettings.allowDoubleInputsDescription")}
                   </p>
                 </div>
                 <Switch
@@ -191,7 +193,7 @@ export function ConfigurationTab() {
         <div>
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-medium flex items-center gap-2">
-              Pad Thresholds
+              {t("padThresholds.title")}
               <HelpButton helpKey="pad-thresholds" />
             </h3>
             <Button
@@ -199,7 +201,7 @@ export function ConfigurationTab() {
               size="icon"
               onClick={resetPadThresholds}
               disabled={!isConnected}
-              title="Reset pad thresholds to defaults"
+              title={t("padThresholds.resetTitle")}
             >
               <RotateCcw className="h-4 w-4" />
             </Button>
@@ -239,15 +241,15 @@ export function ConfigurationTab() {
       <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Factory Reset</DialogTitle>
+            <DialogTitle>{t("factoryReset.title")}</DialogTitle>
             <DialogDescription>
-              Are you sure you want to reset all configuration settings to their default values? This action cannot be undone.
+              {t("factoryReset.description")}
             </DialogDescription>
           </DialogHeader>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowResetDialog(false)}>Cancel</Button>
-            <Button variant="destructive" onClick={handleFactoryReset}>Reset to Defaults</Button>
+            <Button variant="outline" onClick={() => setShowResetDialog(false)}>{t("factoryReset.cancel")}</Button>
+            <Button variant="destructive" onClick={handleFactoryReset}>{t("factoryReset.resetToDefaults")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

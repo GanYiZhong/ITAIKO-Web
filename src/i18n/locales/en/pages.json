@@ -1,0 +1,42 @@
+{
+  "landing": {
+    "hero": {
+      "subtitle": "Configure and calibrate your custom Taiko drum controller directly from your browser.",
+      "badgeWebserial": "WebSerial",
+      "badgeRealtime": "Real-time Monitoring",
+      "badgeNoDownload": "No Download Required"
+    },
+    "cta": {
+      "configure": "Configure Your Drum"
+    },
+    "features": {
+      "liveMonitor": {
+        "title": "Live Monitor",
+        "description": "Real-time sensor visualization with GPU-accelerated graphs"
+      },
+      "easyConfig": {
+        "title": "Easy Configuration",
+        "description": "Adjust thresholds and timing settings with intuitive controls"
+      },
+      "visualFeedback": {
+        "title": "Visual Feedback",
+        "description": "See your drum pads light up in real-time as you play"
+      }
+    },
+    "footer": {
+      "browserRequirement": "Requires Chrome, Edge, Opera or Firefox with WebSerial extension"
+    }
+  },
+  "configure": {
+    "header": {
+      "logoAlt": "Logo"
+    },
+    "advanced": {
+      "label": "Advanced"
+    },
+    "tabs": {
+      "config": "Configuration",
+      "monitor": "Live Monitor"
+    }
+  }
+}

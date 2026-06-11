@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import {
   Dialog,
@@ -14,6 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
 export function FirmwareUpdateModal() {
+  const { t } = useTranslation("connection");
   const { firmwareUpdate, isConnected, exportConfig } = useDevice();
   const { status, progress, error, latestFirmware, modalOpen, setModalOpen, installUpdate } = firmwareUpdate;
   const [backupEnabled, setBackupEnabled] = useState(true);
@@ -59,11 +61,13 @@ export function FirmwareUpdateModal() {
     <Dialog open={modalOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Firmware Update</DialogTitle>
+          <DialogTitle>{t("firmwareUpdateModal.title")}</DialogTitle>
           <DialogDescription>
-            {status === 'available' && (latestFirmware ? `Version ${latestFirmware.version} is available.` : "New version available.")}
-            {status === 'idle' && "Check for firmware updates."}
-            {status === 'complete' && "Update successful!"}
+            {status === 'available' && (latestFirmware
+              ? t("firmwareUpdateModal.description.available", { version: latestFirmware.version })
+              : t("firmwareUpdateModal.description.availableNoVersion"))}
+            {status === 'idle' && t("firmwareUpdateModal.description.idle")}
+            {status === 'complete' && t("firmwareUpdateModal.description.complete")}
           </DialogDescription>
         </DialogHeader>
 
@@ -71,20 +75,20 @@ export function FirmwareUpdateModal() {
           {status === 'available' && latestFirmware && (
             <div className="space-y-4">
                <div className="space-y-2 text-sm text-muted-foreground">
-                 <p className="font-medium text-foreground">How it works:</p>
+                 <p className="font-medium text-foreground">{t("firmwareUpdateModal.howItWorks.heading")}</p>
                  <ol className="list-decimal list-inside space-y-1 ml-1">
-                   <li>The update file will be downloaded.</li>
-                   <li>Your device will reboot into bootloader mode.</li>
-                   <li>A "Save File" dialog will appear. Save the file to the "RPI-RP2" drive.</li>
+                   <li>{t("firmwareUpdateModal.howItWorks.step1")}</li>
+                   <li>{t("firmwareUpdateModal.howItWorks.step2")}</li>
+                   <li>{t("firmwareUpdateModal.howItWorks.step3")}</li>
                  </ol>
                </div>
 
                <div className="flex items-start space-x-2 py-4 border-t">
                  <Switch id="backup-update" checked={backupEnabled} onCheckedChange={setBackupEnabled} className="mt-0.5" />
                  <div>
-                   <Label htmlFor="backup-update">Backup configuration before updating</Label>
+                   <Label htmlFor="backup-update">{t("firmwareUpdateModal.backup.label")}</Label>
                    <p className="text-xs text-muted-foreground mt-0.5">
-                     May take a few seconds if a PS4 auth key is stored.
+                     {t("firmwareUpdateModal.backup.hint")}
                    </p>
                  </div>
                </div>
@@ -103,7 +107,7 @@ export function FirmwareUpdateModal() {
                    <Loader2 className="h-12 w-12 animate-spin text-primary" />
                  )}
               </div>
-              
+
               <div className="space-y-2">
                 <div className="flex justify-between text-sm font-medium">
                   <span className="capitalize">{status.replace(/_/g, ' ')}...</span>
@@ -116,19 +120,19 @@ export function FirmwareUpdateModal() {
 
               {status === 'waiting_for_device' && (
                 <p className="text-sm text-muted-foreground text-center bg-muted/50 p-2 rounded">
-                  Waiting for device to reboot into bootloader mode...
+                  {t("firmwareUpdateModal.progress.waitingForDevice")}
                 </p>
               )}
-              
+
               {status === 'flashing' && (
                 <p className="text-sm text-amber-600 font-medium text-center bg-amber-50 p-2 rounded border border-amber-200">
-                  Please save the file to the "RPI-RP2" drive.
+                  {t("firmwareUpdateModal.progress.flashingPrompt")}
                 </p>
               )}
 
               {status === 'writing' && (
                 <p className="text-sm text-amber-600 font-medium text-center bg-amber-50 p-2 rounded border border-amber-200 animate-pulse">
-                  Copying firmware to device. Do not unplug!
+                  {t("firmwareUpdateModal.progress.writingWarning")}
                 </p>
               )}
             </div>
@@ -139,14 +143,14 @@ export function FirmwareUpdateModal() {
               <div className="bg-amber-50 border border-amber-200 p-4 rounded-md">
                 <div className="flex items-center gap-2 text-amber-800 mb-2">
                   <Download className="h-5 w-5" />
-                  <span className="font-semibold">File downloaded</span>
+                  <span className="font-semibold">{t("firmwareUpdateModal.manualAction.fileDownloaded")}</span>
                 </div>
                 <div className="text-sm text-amber-700 space-y-2">
-                  <p>The firmware file has been downloaded to your computer.</p>
+                  <p>{t("firmwareUpdateModal.manualAction.intro")}</p>
                   <ol className="list-decimal list-inside ml-1">
-                    <li>Locate the downloaded file.</li>
-                    <li>Drag and drop the file onto the "RPI-RP2" drive.</li>
-                    <li>The device will automatically reboot when finished.</li>
+                    <li>{t("firmwareUpdateModal.manualAction.step1")}</li>
+                    <li>{t("firmwareUpdateModal.manualAction.step2")}</li>
+                    <li>{t("firmwareUpdateModal.manualAction.step3")}</li>
                   </ol>
                 </div>
               </div>
@@ -156,8 +160,8 @@ export function FirmwareUpdateModal() {
           {status === 'complete' && (
              <div className="flex flex-col items-center justify-center py-6 text-center space-y-2">
                <CheckCircle2 className="h-16 w-16 text-green-500" />
-               <h3 className="text-lg font-medium">Update Complete!</h3>
-               <p className="text-sm text-muted-foreground">Your device has been updated and is rebooting.</p>
+               <h3 className="text-lg font-medium">{t("firmwareUpdateModal.complete.heading")}</h3>
+               <p className="text-sm text-muted-foreground">{t("firmwareUpdateModal.complete.description")}</p>
              </div>
           )}
 
@@ -165,8 +169,8 @@ export function FirmwareUpdateModal() {
             <div className="bg-destructive/10 p-4 rounded-md flex items-start gap-3 text-destructive">
               <AlertCircle className="h-5 w-5 mt-0.5" />
               <div className="space-y-1">
-                <p className="font-semibold">Update Failed</p>
-                <p className="text-sm">{error || "An unknown error occurred."}</p>
+                <p className="font-semibold">{t("firmwareUpdateModal.error.title")}</p>
+                <p className="text-sm">{error || t("firmwareUpdateModal.error.unknown")}</p>
               </div>
             </div>
           )}
@@ -175,22 +179,30 @@ export function FirmwareUpdateModal() {
         <DialogFooter className="sm:justify-between">
            {status === 'available' ? (
              <>
-               <Button variant="outline" onClick={() => setModalOpen(false)} disabled={isExporting}>Cancel</Button>
+               <Button variant="outline" onClick={() => setModalOpen(false)} disabled={isExporting}>
+                 {t("firmwareUpdateModal.buttons.cancel")}
+               </Button>
                <Button onClick={handleStartUpdate} disabled={isExporting}>
                  {isExporting
-                   ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Exporting backup...</>
-                   : "Start Update"
+                   ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{t("firmwareUpdateModal.buttons.exportingBackup")}</>
+                   : t("firmwareUpdateModal.buttons.startUpdate")
                  }
                </Button>
              </>
            ) : status === 'complete' ? (
-             <Button className="w-full" onClick={() => setModalOpen(false)}>Close</Button>
+             <Button className="w-full" onClick={() => setModalOpen(false)}>
+               {t("firmwareUpdateModal.buttons.close")}
+             </Button>
            ) : status === 'manual_action_required' ? (
-             <Button className="w-full" onClick={() => setModalOpen(false)}>Close</Button>
+             <Button className="w-full" onClick={() => setModalOpen(false)}>
+               {t("firmwareUpdateModal.buttons.close")}
+             </Button>
            ) : status === 'error' ? (
-             <Button className="w-full" variant="secondary" onClick={() => setModalOpen(false)}>Close</Button>
+             <Button className="w-full" variant="secondary" onClick={() => setModalOpen(false)}>
+               {t("firmwareUpdateModal.buttons.close")}
+             </Button>
            ) : (
-             <Button disabled className="w-full">Updating...</Button>
+             <Button disabled className="w-full">{t("firmwareUpdateModal.buttons.updating")}</Button>
            )}
         </DialogFooter>
       </DialogContent>
