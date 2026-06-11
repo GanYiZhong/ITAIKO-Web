@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Skull } from "lucide-react";
@@ -6,6 +7,7 @@ import { toast } from "sonner";
 import { EmergencyRecoveryModal } from "./EmergencyRecoveryModal";
 
 export function HeaderConnectionStatus() {
+  const { t } = useTranslation("connection");
   const {
     status,
     error,
@@ -43,17 +45,19 @@ export function HeaderConnectionStatus() {
         <div className="flex items-center gap-2">
           <AlertCircle className="h-4 w-4 text-destructive" />
           <span className="text-sm text-destructive font-medium">
-            {isFirefox ? "Firefox requires an extension for WebSerial" : "WebSerial not supported"}
+            {isFirefox
+              ? t("headerConnectionStatus.firefoxExtensionRequired")
+              : t("headerConnectionStatus.notSupported")}
           </span>
         </div>
         {isFirefox && (
-          <a 
-            href="https://addons.mozilla.org/en-US/firefox/addon/webserial-for-firefox/" 
-            target="_blank" 
+          <a
+            href="https://addons.mozilla.org/en-US/firefox/addon/webserial-for-firefox/"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-[10px] text-primary hover:underline max-w-[200px] text-right leading-tight"
           >
-            To configure your drum with Firefox, please install the WebSerial extension
+            {t("headerConnectionStatus.firefoxExtensionLink")}
           </a>
         )}
       </div>
@@ -71,7 +75,7 @@ export function HeaderConnectionStatus() {
         variant="ghost"
         size="icon"
         onClick={() => setRecoveryModalOpen(true)}
-        title="Emergency Recovery"
+        title={t("headerConnectionStatus.emergencyRecovery")}
         className="h-8 w-8 text-destructive hover:text-destructive"
       >
         <Skull className="h-4 w-4" />
@@ -83,7 +87,9 @@ export function HeaderConnectionStatus() {
         disabled={status === "connecting"}
         className={isConnected ? "bg-amber-500 text-black hover:bg-amber-600" : ""}
       >
-        {isConnected ? "Disconnect" : "Connect"}
+        {isConnected
+          ? t("headerConnectionStatus.disconnect")
+          : t("headerConnectionStatus.connect")}
       </Button>
 
       <EmergencyRecoveryModal

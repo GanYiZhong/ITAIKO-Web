@@ -1,19 +1,21 @@
 import { registerHelp } from "@/components/ui/help-modal";
 import { LucideAlertTriangle } from "lucide-react";
+import i18n from "@/i18n";
 
 // Register all help content on module load
 export function initializeHelpContent() {
+  const t = (key: string) => i18n.t(key, { ns: "help" });
+
   // Global Settings
   registerHelp("global-settings", {
-    title: "Global Settings",
-    description: "Settings that affect the overall behavior of the drum.",
+    title: t("globalSettings.title"),
+    description: t("globalSettings.description"),
     content: (
       <div className="space-y-4">
         <section>
-          <h4 className="font-semibold">Allow Double Inputs</h4>
+          <h4 className="font-semibold">{t("globalSettings.allowDoubleInputs.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Enabling this option allows you to hit both pads harder and hit big notes. <br /> Using this functionality requires setting the heavy trigger setting in the pad tresholds
+            {t("globalSettings.allowDoubleInputs.body")}
           </p>
         </section>
       </div>
@@ -22,40 +24,30 @@ export function initializeHelpContent() {
 
   // Pad Thresholds
   registerHelp("pad-thresholds", {
-    title: "Pad Thresholds",
-    description: "Configure the sensitivity and trigger levels for each pad.",
+    title: t("padThresholds.title"),
+    description: t("padThresholds.description"),
     content: (
       <div className="space-y-4">
         <section>
-          <h4 className="font-semibold">Light Trigger</h4>
+          <h4 className="font-semibold">{t("padThresholds.lightTrigger.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            How hard the pad must be hit to register a note. <br /> This is the most important setting to configure.
+            {t("padThresholds.lightTrigger.body")}
           </p>
         </section>
         <section>
-          <h4 className="font-semibold">Heavy Trigger</h4>
+          <h4 className="font-semibold">{t("padThresholds.heavyTrigger.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            This field appears only after enabling "Allow Double Inputs in Global Settings"
-            <br />
-            This treshold is what decides if a hit to a pad bypasses the debounce and let's you hit a Big Note.
+            {t("padThresholds.heavyTrigger.body")}
           </p>
         </section>
         <section className="flex flex-col gap-2">
-          <h4 className="font-semibold">Cutoff</h4>
+          <h4 className="font-semibold">{t("padThresholds.cutoff.heading")}</h4>
           <div className="container border-destructive border-2 p-4 bg-destructive/5  text-destructive rounded-xl">
             <LucideAlertTriangle className="inline" />
-            Verify you actually have this issue in the live monitor before setting this slider to a value lower than 4095.
+            {t("padThresholds.cutoff.warning")}
           </div>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            This setting is used in the situation where hitting a pad very hard causes a spike in another unrelated pad.
-            <br />
-            In some boards we found out some current can leak into the analog input of another pin causing missreadings.
-            <br />
-            <br/>
-            This cutoff slider makes it so any hit that goes over this treshold is istantly ignored
+            {t("padThresholds.cutoff.body")}
           </p>
         </section>
       </div>
@@ -64,22 +56,20 @@ export function initializeHelpContent() {
 
   // Timing Settings
   registerHelp("timing-settings", {
-    title: "Timing Settings",
-    description: "Configure timing-related parameters for hit detection.",
+    title: t("timingSettings.title"),
+    description: t("timingSettings.description"),
     content: (
       <div className="space-y-4">
         <section>
-          <h4 className="font-semibold">Debounce Time</h4>
+          <h4 className="font-semibold">{t("timingSettings.debounceTime.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("timingSettings.debounceTime.body")}
           </p>
         </section>
         <section>
-          <h4 className="font-semibold">Sample Count</h4>
+          <h4 className="font-semibold">{t("timingSettings.sampleCount.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("timingSettings.sampleCount.body")}
           </p>
         </section>
       </div>
@@ -88,22 +78,20 @@ export function initializeHelpContent() {
 
   // ADC Channel Settings
   registerHelp("adc-channels", {
-    title: "ADC Channel Mapping",
-    description: "Map physical ADC channels to drum pads.",
+    title: t("adcChannels.title"),
+    description: t("adcChannels.description"),
     content: (
       <div className="space-y-4">
         <section>
-          <h4 className="font-semibold">What are ADC Channels?</h4>
+          <h4 className="font-semibold">{t("adcChannels.whatAreAdcChannels.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("adcChannels.whatAreAdcChannels.body")}
           </p>
         </section>
         <section>
-          <h4 className="font-semibold">Channel Assignment</h4>
+          <h4 className="font-semibold">{t("adcChannels.channelAssignment.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("adcChannels.channelAssignment.body")}
           </p>
         </section>
       </div>
@@ -112,22 +100,20 @@ export function initializeHelpContent() {
 
   // Key Mapping Settings
   registerHelp("key-mappings", {
-    title: "Key Mappings",
-    description: "Configure which keys are sent when pads are hit.",
+    title: t("keyMappings.title"),
+    description: t("keyMappings.description"),
     content: (
       <div className="space-y-4">
         <section>
-          <h4 className="font-semibold">Gamepad Buttons</h4>
+          <h4 className="font-semibold">{t("keyMappings.gamepadButtons.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("keyMappings.gamepadButtons.body")}
           </p>
         </section>
         <section>
-          <h4 className="font-semibold">Keyboard Keys</h4>
+          <h4 className="font-semibold">{t("keyMappings.keyboardKeys.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("keyMappings.keyboardKeys.body")}
           </p>
         </section>
       </div>
@@ -136,34 +122,34 @@ export function initializeHelpContent() {
 
   // Boot Screen
   registerHelp("boot-screen", {
-    title: "Boot Screen",
-    description: "Customize the startup splash screen of your controller.",
+    title: t("bootScreen.title"),
+    description: t("bootScreen.description"),
     content: (
       <div className="space-y-4">
         <section>
-          <h4 className="font-semibold">Image Requirements</h4>
+          <h4 className="font-semibold">{t("bootScreen.imageRequirements.heading")}</h4>
           <p className="text-muted-foreground">
-            The image will be converted to a 128x64 pixel 1-bit monochrome (black and white) bitmap.
+            {t("bootScreen.imageRequirements.intro")}
             <ul className="list-disc pl-5 mt-2 space-y-1">
-              <li>Supported formats: PNG, JPG, BMP</li>
-              <li>Optimal aspect ratio: 2:1</li>
-              <li>Colors: Will be dithered/thresholded to black and white</li>
+              <li>{t("bootScreen.imageRequirements.formatItem")}</li>
+              <li>{t("bootScreen.imageRequirements.aspectRatioItem")}</li>
+              <li>{t("bootScreen.imageRequirements.colorsItem")}</li>
             </ul>
           </p>
         </section>
         <section>
-          <h4 className="font-semibold">How to Use</h4>
+          <h4 className="font-semibold">{t("bootScreen.howToUse.heading")}</h4>
           <p className="text-muted-foreground">
-            1. Select an image file.<br />
-            2. Preview the monochrome conversion.<br />
-            3. Click "Upload to Device" to flash the new image.<br />
-            4. The new splash screen will appear next time you plug in the device.
+            {t("bootScreen.howToUse.step1")}<br />
+            {t("bootScreen.howToUse.step2")}<br />
+            {t("bootScreen.howToUse.step3")}<br />
+            {t("bootScreen.howToUse.step4")}
           </p>
         </section>
         <section>
-          <h4 className="font-semibold">Restoring Default</h4>
+          <h4 className="font-semibold">{t("bootScreen.restoringDefault.heading")}</h4>
           <p className="text-muted-foreground">
-            Click the trash icon to clear the custom image and restore the original ITAIKO logo.
+            {t("bootScreen.restoringDefault.body")}
           </p>
         </section>
       </div>
@@ -172,22 +158,20 @@ export function initializeHelpContent() {
 
   // Live Monitor
   registerHelp("live-monitor", {
-    title: "Live Monitor",
-    description: "Real-time visualization of pad inputs.",
+    title: t("liveMonitor.title"),
+    description: t("liveMonitor.description"),
     content: (
       <div className="space-y-4">
         <section>
-          <h4 className="font-semibold">Graph Display</h4>
+          <h4 className="font-semibold">{t("liveMonitor.graphDisplay.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("liveMonitor.graphDisplay.body")}
           </p>
         </section>
         <section>
-          <h4 className="font-semibold">Trigger Indicators</h4>
+          <h4 className="font-semibold">{t("liveMonitor.triggerIndicators.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("liveMonitor.triggerIndicators.body")}
           </p>
         </section>
       </div>
@@ -196,18 +180,24 @@ export function initializeHelpContent() {
 
   // Visual Drum
   registerHelp("visual-drum", {
-    title: "Visual Drum",
-    description: "Visual representation of drum hits.",
+    title: t("visualDrum.title"),
+    description: t("visualDrum.description"),
     content: (
       <div className="space-y-4">
         <section>
-          <h4 className="font-semibold">How to Use</h4>
+          <h4 className="font-semibold">{t("visualDrum.howToUse.heading")}</h4>
           <p className="text-muted-foreground">
-            {/* TODO: Add documentation */}
-            Documentation coming soon...
+            {t("visualDrum.howToUse.body")}
           </p>
         </section>
       </div>
     ),
   });
 }
+
+// Re-register help content when the language changes so consumers
+// always get translated strings. Guard against duplicate listeners
+// by removing before adding (i18next de-dupes by function reference).
+const _onLanguageChanged = () => initializeHelpContent();
+i18n.off("languageChanged", _onLanguageChanged);
+i18n.on("languageChanged", _onLanguageChanged);

@@ -1,0 +1,126 @@
+{
+  "keyboardHelper": {
+    "title": "Having trouble connecting?",
+    "description": "The configurator requires the drum to be in <strong>Keyboard mode</strong>. Follow these steps:",
+    "step1": {
+      "label": "Step 1 — Hold <strong>+</strong> and <strong>-</strong> for 2 seconds",
+      "holdHint": "Hold until the menu appears"
+    },
+    "step2": {
+      "label": "Step 2 — Navigate to <strong>Device Mode</strong>",
+      "navHint": "Use the D-pad to navigate"
+    },
+    "step3": {
+      "label": "Step 3 — Select <strong>Keyboard P1</strong> (or P2)",
+      "confirmHint": "Press confirm to select"
+    },
+    "gotIt": "Got it, I'll try that",
+    "dontShow": "Don't show this again"
+  },
+  "ps4AuthGenerator": {
+    "title": "PS4 Auth Generator (Debug)",
+    "description": "Upload <code>key.pem</code>, <code>serial.txt</code>, and <code>sig.bin</code> to generate canonical auth bytes for comparison with <code>generateAuthConfig.py</code>, then upload them directly to the board.",
+    "buttons": {
+      "generating": "Generating...",
+      "generate": "Generate Debug Data",
+      "downloadOutput": "Download Output",
+      "uploadToDevice": "Upload To Device",
+      "checkDeviceStatus": "Check Device Status",
+      "clearDeviceAuth": "Clear Device Auth",
+      "clear": "Clear"
+    },
+    "errors": {
+      "selectFiles": "Please select key.pem, serial.txt, and sig.bin.",
+      "generateFailed": "Failed to generate PS4 auth data.",
+      "connectToCheck": "Connect a device to check PS4 auth status.",
+      "queryFailed": "Failed to query PS4 auth status.",
+      "generateFirst": "Generate data first.",
+      "connectBeforeUpload": "Connect a device before uploading.",
+      "uploadFailed": "Upload failed. Check serial connection and try again.",
+      "uploadFailedGeneric": "Upload failed.",
+      "connectBeforeClear": "Connect a device before clearing PS4 auth.",
+      "clearFailed": "Clear failed. Check serial connection and try again.",
+      "clearFailedGeneric": "Clear failed."
+    },
+    "status": {
+      "authPresent": "Device status: PS4 auth is present.",
+      "authAbsent": "Device status: no PS4 auth stored.",
+      "uploadedRebooting": "PS4 auth uploaded. Device is rebooting — reconnect when it comes back.",
+      "clearedRebooting": "PS4 auth cleared. Device is rebooting — reconnect when it comes back."
+    },
+    "output": {
+      "generatedSummary": "Generated: serial {{serialBytes}} bytes, signature {{signatureBytes}} bytes, key.pem {{keyPemChars}} chars.",
+      "serialCArray": "Serial C Array (16 bytes)",
+      "signatureCArray": "Signature C Array (256 bytes)",
+      "keyPem": "key.pem"
+    }
+  },
+  "ps4AuthSetup": {
+    "cardTitle": "PS4 Authentication",
+    "status": {
+      "connectToCheck": "Connect a device to check status.",
+      "checkingStatus": "Checking status...",
+      "authInstalled": "PS4 auth key is installed. PS4 mode is fully supported.",
+      "noAuthKey": "No PS4 auth key. PS4 mode will disconnect after 8 minutes."
+    },
+    "buttons": {
+      "setUp": "Set Up",
+      "removeKey": "Remove Key",
+      "refreshTitle": "Refresh status"
+    },
+    "setupModal": {
+      "title": "Set Up PS4 Authentication",
+      "descriptionSelect": "Upload your DS4 credentials to enable full PS4 compatibility.",
+      "descriptionConfirm": "Review and upload to your controller.",
+      "descriptionUploading": "Please wait while credentials are transferred.",
+      "descriptionDone": "Setup complete.",
+      "filesIntro": "You'll need three files extracted from a PS4 DualShock 4 controller:",
+      "fileList": {
+        "keyPem": "<code>key.pem</code> — the private RSA key",
+        "serialTxt": "<code>serial.txt</code> — the controller serial (hex)",
+        "sigBin": "<code>sig.bin</code> — the signature blob"
+      },
+      "validated": {
+        "heading": "Files validated successfully",
+        "summary": "Serial: {{serialBytes}} bytes · Signature: {{signatureBytes}} bytes · Key: {{keyPemChars}} chars"
+      },
+      "whatWillHappen": {
+        "heading": "What will happen:",
+        "step1": "The credentials are uploaded to the controller.",
+        "step2": "The controller reboots automatically.",
+        "step3": "Reconnect and switch to PS4 mode."
+      },
+      "uploading": "Uploading credentials to controller...",
+      "rebooting": {
+        "heading": "Credentials uploaded!",
+        "body": "The controller is rebooting. Reconnect once it comes back online, then switch to PS4 mode."
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "continue": "Continue",
+        "back": "Back",
+        "uploadToController": "Upload to Controller",
+        "close": "Close"
+      },
+      "errors": {
+        "readFailed": "Failed to read files. Check their format and try again.",
+        "uploadFailed": "Upload failed. Check your connection and try again."
+      }
+    },
+    "clearModal": {
+      "title": "Remove PS4 Auth Key",
+      "descriptionPending": "This will delete the stored PS4 credentials from the controller and reboot it.",
+      "descriptionDone": "The controller is rebooting.",
+      "keyRemoved": "Key removed. Reconnect when the controller comes back online.",
+      "buttons": {
+        "cancel": "Cancel",
+        "remove": "Remove Key",
+        "removing": "Removing...",
+        "close": "Close"
+      },
+      "errors": {
+        "clearFailed": "Clear failed. Check your connection and try again."
+      }
+    }
+  }
+}

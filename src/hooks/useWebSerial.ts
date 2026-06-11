@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, type RefObject, useEffect } from "react"
 import type { ConnectionStatus, DeviceCommand } from "@/types";
 import { PICO_VENDOR_ID, BAUD_RATE } from "@/types";
 import { encodeCommand } from "@/lib/serial-protocol";
+import i18n from "@/i18n";
 
 interface UseWebSerialReturn {
   status: ConnectionStatus;
@@ -187,7 +188,7 @@ export function useWebSerial(): UseWebSerialReturn {
             writerRef.current = null;
             lineQueueRef.current = [];
             setStatus("disconnected");
-            setError("Device disconnected");
+            setError(i18n.t("serial.deviceDisconnected", { ns: "messages" }));
           }
           break;
         }
@@ -200,7 +201,7 @@ export function useWebSerial(): UseWebSerialReturn {
 
   const requestPort = useCallback(async (): Promise<SerialPort | null> => {
     if (!isSupported) {
-      setError("WebSerial is not supported");
+      setError(i18n.t("serial.notSupported", { ns: "messages" }));
       return null;
     }
     try {
@@ -237,7 +238,7 @@ export function useWebSerial(): UseWebSerialReturn {
 
   const connect = useCallback(async (): Promise<boolean> => {
     if (!port.current) {
-      setError("No port selected");
+      setError(i18n.t("serial.noPortSelected", { ns: "messages" }));
       return false;
     }
 
@@ -262,10 +263,10 @@ export function useWebSerial(): UseWebSerialReturn {
         startReadLoop();
         return true;
       } else {
-        throw new Error("Port streams not available");
+        throw new Error(i18n.t("serial.connectionFailed", { ns: "messages" }));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Connection failed");
+      setError(err instanceof Error ? err.message : i18n.t("serial.connectionFailed", { ns: "messages" }));
       setStatus("error");
       return false;
     }
@@ -315,7 +316,7 @@ export function useWebSerial(): UseWebSerialReturn {
   }, [port]);
 
   const sendCommand = useCallback(async (command: DeviceCommand, data?: string): Promise<void> => {
-      if (!writerRef.current) throw new Error("Not connected");
+      if (!writerRef.current) throw new Error(i18n.t("serial.notConnected", { ns: "messages" }));
       const cmdStr = data ? `${command}\n${data}\n` : `${command}\n`;
       if (new URLSearchParams(window.location.search).get("tx") === "true") {
         console.log(`[Serial TX] ${cmdStr.trim()}`);
@@ -324,7 +325,7 @@ export function useWebSerial(): UseWebSerialReturn {
     }, []);
 
   const sendBinary = useCallback(async (data: Uint8Array): Promise<void> => {
-      if (!writerRef.current) throw new Error("Not connected");
+      if (!writerRef.current) throw new Error(i18n.t("serial.notConnected", { ns: "messages" }));
       await writerRef.current.write(data);
   }, []);
 

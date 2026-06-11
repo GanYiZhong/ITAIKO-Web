@@ -1,0 +1,126 @@
+{
+  "keyboardHelper": {
+    "title": "連線時遇到問題？",
+    "description": "設定工具需要鼓組切換至<strong>鍵盤模式</strong>，請依下列步驟操作：",
+    "step1": {
+      "label": "步驟 1 — 按住 <strong>+</strong> 和 <strong>-</strong> 兩秒",
+      "holdHint": "按住直到選單出現為止"
+    },
+    "step2": {
+      "label": "步驟 2 — 移至 <strong>Device Mode</strong>",
+      "navHint": "使用方向鍵導覽"
+    },
+    "step3": {
+      "label": "步驟 3 — 選擇 <strong>Keyboard P1</strong>（或 P2）",
+      "confirmHint": "按下確認鍵以選取"
+    },
+    "gotIt": "了解，我來試試看",
+    "dontShow": "不要再顯示"
+  },
+  "ps4AuthGenerator": {
+    "title": "PS4 驗證產生器（偵錯）",
+    "description": "上傳 <code>key.pem</code>、<code>serial.txt</code> 及 <code>sig.bin</code>，以產生可與 <code>generateAuthConfig.py</code> 比對的標準驗證位元組，並直接上傳至主板。",
+    "buttons": {
+      "generating": "產生中...",
+      "generate": "產生偵錯資料",
+      "downloadOutput": "下載輸出結果",
+      "uploadToDevice": "上傳至主機",
+      "checkDeviceStatus": "檢查主機狀態",
+      "clearDeviceAuth": "清除主機驗證",
+      "clear": "清除"
+    },
+    "errors": {
+      "selectFiles": "請選擇 key.pem、serial.txt 及 sig.bin。",
+      "generateFailed": "無法產生 PS4 驗證資料。",
+      "connectToCheck": "請先連線主機以檢查 PS4 驗證狀態。",
+      "queryFailed": "查詢 PS4 驗證狀態失敗。",
+      "generateFirst": "請先產生資料。",
+      "connectBeforeUpload": "請先連線主機再進行上傳。",
+      "uploadFailed": "上傳失敗，請確認序列埠連線後再試一次。",
+      "uploadFailedGeneric": "上傳失敗。",
+      "connectBeforeClear": "請先連線主機再清除 PS4 驗證。",
+      "clearFailed": "清除失敗，請確認序列埠連線後再試一次。",
+      "clearFailedGeneric": "清除失敗。"
+    },
+    "status": {
+      "authPresent": "主機狀態：PS4 驗證已存在。",
+      "authAbsent": "主機狀態：尚未儲存 PS4 驗證。",
+      "uploadedRebooting": "PS4 驗證已上傳，主機重新開機中——請等待主機回復後重新連線。",
+      "clearedRebooting": "PS4 驗證已清除，主機重新開機中——請等待主機回復後重新連線。"
+    },
+    "output": {
+      "generatedSummary": "已產生：序號 {{serialBytes}} 位元組，簽章 {{signatureBytes}} 位元組，key.pem {{keyPemChars}} 字元。",
+      "serialCArray": "序號 C 陣列（16 位元組）",
+      "signatureCArray": "簽章 C 陣列（256 位元組）",
+      "keyPem": "key.pem"
+    }
+  },
+  "ps4AuthSetup": {
+    "cardTitle": "PS4 驗證",
+    "status": {
+      "connectToCheck": "請先連線主機以檢查狀態。",
+      "checkingStatus": "狀態檢查中...",
+      "authInstalled": "PS4 驗證金鑰已安裝，PS4 模式完整支援。",
+      "noAuthKey": "尚未設定 PS4 驗證金鑰，PS4 模式將在 8 分鐘後斷線。"
+    },
+    "buttons": {
+      "setUp": "設定",
+      "removeKey": "移除金鑰",
+      "refreshTitle": "重新整理狀態"
+    },
+    "setupModal": {
+      "title": "設定 PS4 驗證",
+      "descriptionSelect": "上傳您的 DS4 憑證以啟用完整 PS4 相容性。",
+      "descriptionConfirm": "確認後上傳至控制器。",
+      "descriptionUploading": "憑證傳輸中，請稍候。",
+      "descriptionDone": "設定完成。",
+      "filesIntro": "您需要從 PS4 DualShock 4 控制器取出的三個檔案：",
+      "fileList": {
+        "keyPem": "<code>key.pem</code> — RSA 私鑰",
+        "serialTxt": "<code>serial.txt</code> — 控制器序號（十六進位）",
+        "sigBin": "<code>sig.bin</code> — 簽章資料"
+      },
+      "validated": {
+        "heading": "檔案驗證成功",
+        "summary": "序號：{{serialBytes}} 位元組　·　簽章：{{signatureBytes}} 位元組　·　金鑰：{{keyPemChars}} 字元"
+      },
+      "whatWillHappen": {
+        "heading": "接下來將執行：",
+        "step1": "憑證上傳至控制器。",
+        "step2": "控制器自動重新開機。",
+        "step3": "重新連線後切換至 PS4 模式。"
+      },
+      "uploading": "正在上傳憑證至控制器...",
+      "rebooting": {
+        "heading": "憑證已上傳！",
+        "body": "控制器正在重新開機，請等待回復後重新連線，並切換至 PS4 模式。"
+      },
+      "buttons": {
+        "cancel": "取消",
+        "continue": "繼續",
+        "back": "返回",
+        "uploadToController": "上傳至控制器",
+        "close": "關閉"
+      },
+      "errors": {
+        "readFailed": "檔案讀取失敗，請確認檔案格式後再試一次。",
+        "uploadFailed": "上傳失敗，請確認連線後再試一次。"
+      }
+    },
+    "clearModal": {
+      "title": "移除 PS4 驗證金鑰",
+      "descriptionPending": "此操作將刪除控制器中儲存的 PS4 憑證，並重新開機。",
+      "descriptionDone": "控制器重新開機中。",
+      "keyRemoved": "金鑰已移除，請等待控制器回復後重新連線。",
+      "buttons": {
+        "cancel": "取消",
+        "remove": "移除金鑰",
+        "removing": "移除中...",
+        "close": "關閉"
+      },
+      "errors": {
+        "clearFailed": "清除失敗，請確認連線後再試一次。"
+      }
+    }
+  }
+}

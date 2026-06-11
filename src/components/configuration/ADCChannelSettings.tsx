@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -28,6 +29,8 @@ function ADCChannelSelect({
   onChange,
   disabled,
 }: ADCChannelSelectProps) {
+  const { t } = useTranslation("config");
+
   const handleValueChange = (valueStr: string) => {
     onChange(pad, parseInt(valueStr, 10));
   };
@@ -44,10 +47,10 @@ function ADCChannelSelect({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="0">Channel 0</SelectItem>
-          <SelectItem value="1">Channel 1</SelectItem>
-          <SelectItem value="2">Channel 2</SelectItem>
-          <SelectItem value="3">Channel 3</SelectItem>
+          <SelectItem value="0">{t("adcChannels.channel", { n: 0 })}</SelectItem>
+          <SelectItem value="1">{t("adcChannels.channel", { n: 1 })}</SelectItem>
+          <SelectItem value="2">{t("adcChannels.channel", { n: 2 })}</SelectItem>
+          <SelectItem value="3">{t("adcChannels.channel", { n: 3 })}</SelectItem>
         </SelectContent>
       </Select>
     </div>
@@ -55,6 +58,7 @@ function ADCChannelSelect({
 }
 
 export function ADCChannelSettings() {
+  const { t } = useTranslation("config");
   const { config, updateADCChannel, isConnected, resetADCChannels } = useDevice();
   const adcChannels = config.adcChannels;
 
@@ -68,7 +72,7 @@ export function ADCChannelSettings() {
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
-            ADC Channel Mapping
+            {t("adcChannels.title")}
             <HelpButton helpKey="adc-channels" />
 
           </CardTitle>
@@ -78,41 +82,41 @@ export function ADCChannelSettings() {
             size="icon"
             onClick={resetADCChannels}
             disabled={!isConnected}
-            title="Reset ADC channels to defaults"
+            title={t("adcChannels.resetTitle")}
           >
             <RotateCcw className="h-4 w-4" />
           </Button>
         </div>
         <CardDescription>
-          Configure which ADC channels read each drum pad. Useful for older drums with different wiring.
+          {t("adcChannels.description")}
         </CardDescription>
       </CardHeader>
       <CardContent>
 
         <div className="space-y-3">
           <ADCChannelSelect
-            label="Don Left"
+            label={t("adcChannels.donLeft")}
             pad="donLeft"
             value={adcChannels.donLeft}
             onChange={updateADCChannel}
             disabled={!isConnected}
           />
           <ADCChannelSelect
-            label="Ka Left"
+            label={t("adcChannels.kaLeft")}
             pad="kaLeft"
             value={adcChannels.kaLeft}
             onChange={updateADCChannel}
             disabled={!isConnected}
           />
           <ADCChannelSelect
-            label="Don Right"
+            label={t("adcChannels.donRight")}
             pad="donRight"
             value={adcChannels.donRight}
             onChange={updateADCChannel}
             disabled={!isConnected}
           />
           <ADCChannelSelect
-            label="Ka Right"
+            label={t("adcChannels.kaRight")}
             pad="kaRight"
             value={adcChannels.kaRight}
             onChange={updateADCChannel}

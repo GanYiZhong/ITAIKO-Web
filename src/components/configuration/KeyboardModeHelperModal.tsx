@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import {
   Dialog,
   DialogContent,
@@ -17,10 +18,13 @@ interface StepProps {
 }
 
 function Step1HoldButtons({ active }: StepProps) {
+  const { t } = useTranslation("setup");
   return (
     <div className="flex flex-col items-center gap-4">
       <p className="text-sm text-muted-foreground text-center">
-        Step 1 — Hold <strong>+</strong> and <strong>-</strong> for 2 seconds
+        <Trans i18nKey="keyboardHelper.step1.label" ns="setup">
+          Step 1 — Hold <strong>+</strong> and <strong>-</strong> for 2 seconds
+        </Trans>
       </p>
       <div className="flex gap-4">
         {["+", "-"].map((label) => (
@@ -49,12 +53,13 @@ function Step1HoldButtons({ active }: StepProps) {
           }
         />
       </div>
-      <p className="text-xs text-muted-foreground">Hold until the menu appears</p>
+      <p className="text-xs text-muted-foreground">{t("keyboardHelper.step1.holdHint")}</p>
     </div>
   );
 }
 
 function Step2NavigateMenu({ active }: StepProps) {
+  const { t } = useTranslation("setup");
   const items = ["Device Mode", "Drum Settings", "LED Settings", "System"];
   const [highlighted, setHighlighted] = useState(0);
 
@@ -70,7 +75,9 @@ function Step2NavigateMenu({ active }: StepProps) {
   return (
     <div className="flex flex-col items-center gap-4">
       <p className="text-sm text-muted-foreground text-center">
-        Step 2 — Navigate to <strong>Device Mode</strong>
+        <Trans i18nKey="keyboardHelper.step2.label" ns="setup">
+          Step 2 — Navigate to <strong>Device Mode</strong>
+        </Trans>
       </p>
       <div className="w-48 border rounded-lg overflow-hidden bg-background shadow-md">
         <div className="bg-muted px-3 py-1.5 text-xs font-semibold text-center border-b">ITAIKO Menu</div>
@@ -88,12 +95,13 @@ function Step2NavigateMenu({ active }: StepProps) {
           </div>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground">Use the D-pad to navigate</p>
+      <p className="text-xs text-muted-foreground">{t("keyboardHelper.step2.navHint")}</p>
     </div>
   );
 }
 
 function Step3SelectKeyboard({ active }: StepProps) {
+  const { t } = useTranslation("setup");
   const modes = ["Switch Tatacon", "Switch Horipad", "PS3 Dualshock3", "Keyboard P1", "Keyboard P2"];
   const [highlighted, setHighlighted] = useState(0);
 
@@ -115,7 +123,9 @@ function Step3SelectKeyboard({ active }: StepProps) {
   return (
     <div className="flex flex-col items-center gap-4">
       <p className="text-sm text-muted-foreground text-center">
-        Step 3 — Select <strong>Keyboard P1</strong> (or P2)
+        <Trans i18nKey="keyboardHelper.step3.label" ns="setup">
+          Step 3 — Select <strong>Keyboard P1</strong> (or P2)
+        </Trans>
       </p>
       <div className="w-48 border rounded-lg overflow-hidden bg-background shadow-md">
         <div className="bg-muted px-3 py-1.5 text-xs font-semibold text-center border-b">Device Mode</div>
@@ -133,7 +143,7 @@ function Step3SelectKeyboard({ active }: StepProps) {
           </div>
         ))}
       </div>
-      <p className="text-xs text-muted-foreground">Press confirm to select</p>
+      <p className="text-xs text-muted-foreground">{t("keyboardHelper.step3.confirmHint")}</p>
     </div>
   );
 }
@@ -144,6 +154,7 @@ interface KeyboardModeHelperModalProps {
 }
 
 export function KeyboardModeHelperModal({ open, onClose }: KeyboardModeHelperModalProps) {
+  const { t } = useTranslation("setup");
   const [step, setStep] = useState(0);
 
   // Cycle through steps while open
@@ -180,11 +191,12 @@ export function KeyboardModeHelperModal({ open, onClose }: KeyboardModeHelperMod
         <DialogContent className="max-w-sm">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <span className="text-amber-500">⚠</span> Having trouble connecting?
+              <span className="text-amber-500">⚠</span> {t("keyboardHelper.title")}
             </DialogTitle>
             <DialogDescription>
-              The configurator requires the drum to be in <strong>Keyboard mode</strong>.
-              Follow these steps:
+              <Trans i18nKey="keyboardHelper.description" ns="setup">
+                The configurator requires the drum to be in <strong>Keyboard mode</strong>. Follow these steps:
+              </Trans>
             </DialogDescription>
           </DialogHeader>
 
@@ -209,10 +221,10 @@ export function KeyboardModeHelperModal({ open, onClose }: KeyboardModeHelperMod
 
           <DialogFooter className="flex-col sm:flex-col gap-2">
             <Button onClick={() => handleDismiss(false)} className="w-full">
-              Got it, I'll try that
+              {t("keyboardHelper.gotIt")}
             </Button>
             <Button variant="ghost" size="sm" className="text-xs text-muted-foreground w-full" onClick={() => handleDismiss(true)}>
-              Don't show this again
+              {t("keyboardHelper.dontShow")}
             </Button>
           </DialogFooter>
         </DialogContent>

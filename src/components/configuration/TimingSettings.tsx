@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -69,6 +70,7 @@ function TimingSetting({
 }
 
 export function TimingSettings() {
+  const { t } = useTranslation("config");
   const { config, updateTiming, isConnected, resetTiming } = useDevice();
   const timing = config.timing;
 
@@ -77,7 +79,7 @@ export function TimingSettings() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
-            Timing Settings
+            {t("timing.title")}
             <HelpButton helpKey="timing-settings" />
           </CardTitle>
           <Button
@@ -85,7 +87,7 @@ export function TimingSettings() {
             size="icon"
             onClick={resetTiming}
             disabled={!isConnected}
-            title="Reset timing to defaults"
+            title={t("timing.resetTitle")}
           >
             <RotateCcw className="h-4 w-4" />
           </Button>
@@ -93,35 +95,35 @@ export function TimingSettings() {
       </CardHeader>
       <CardContent className="space-y-4">
         <TimingSetting
-          label="Key Hold Time"
+          label={t("timing.keyHoldTime")}
           field="keyHoldTime"
           value={timing.keyHoldTime}
           onChange={updateTiming}
           disabled={!isConnected}
         />
         <TimingSetting
-          label="Don Debounce"
+          label={t("timing.donDebounce")}
           field="donDebounce"
           value={timing.donDebounce}
           onChange={updateTiming}
           disabled={!isConnected}
         />
         <TimingSetting
-          label="Ka Debounce"
+          label={t("timing.kaDebounce")}
           field="kaDebounce"
           value={timing.kaDebounce}
           onChange={updateTiming}
           disabled={!isConnected}
         />
         <TimingSetting
-          label="Crosstalk Debounce"
+          label={t("timing.crosstalkDebounce")}
           field="crosstalkDebounce"
           value={timing.crosstalkDebounce}
           onChange={updateTiming}
           disabled={!isConnected}
         />
         <TimingSetting
-          label="Individual Debounce"
+          label={t("timing.individualDebounce")}
           field="individualDebounce"
           value={timing.individualDebounce}
           onChange={updateTiming}

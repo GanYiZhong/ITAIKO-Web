@@ -1,0 +1,98 @@
+{
+  "connectOverlay": {
+    "connectYourDrum": "Connect your drum",
+    "toStartConfiguration": "to start configuration",
+    "setKeyboardMode": "⚠ Set the drum to Keyboard mode before connecting"
+  },
+  "globalSettings": {
+    "title": "Global Settings",
+    "allowDoubleInputs": "Allow Double Inputs",
+    "allowDoubleInputsDescription": "Enable heavy trigger threshold for fast double hits"
+  },
+  "padThresholds": {
+    "title": "Pad Thresholds",
+    "resetTitle": "Reset pad thresholds to defaults"
+  },
+  "factoryReset": {
+    "title": "Factory Reset",
+    "description": "Are you sure you want to reset all configuration settings to their default values? This action cannot be undone.",
+    "cancel": "Cancel",
+    "resetToDefaults": "Reset to Defaults"
+  },
+  "padConfig": {
+    "lightTrigger": "Light Trigger",
+    "heavyTrigger": "Heavy Trigger",
+    "cutoff": "Cutoff"
+  },
+  "timing": {
+    "title": "Timing Settings",
+    "resetTitle": "Reset timing to defaults",
+    "keyHoldTime": "Key Hold Time",
+    "donDebounce": "Don Debounce",
+    "kaDebounce": "Ka Debounce",
+    "crosstalkDebounce": "Crosstalk Debounce",
+    "individualDebounce": "Individual Debounce"
+  },
+  "adcChannels": {
+    "title": "ADC Channel Mapping",
+    "resetTitle": "Reset ADC channels to defaults",
+    "description": "Configure which ADC channels read each drum pad. Useful for older drums with different wiring.",
+    "donLeft": "Don Left",
+    "kaLeft": "Ka Left",
+    "donRight": "Don Right",
+    "kaRight": "Ka Right",
+    "channel": "Channel {{n}}"
+  },
+  "drumKeyMapping": {
+    "title": "Drum Key Bindings",
+    "resetTitle": "Reset key mappings to defaults",
+    "player1": "Player 1",
+    "player2": "Player 2",
+    "listeningPrompt": "Press any key to assign to {{padLabel}}..."
+  },
+  "interactiveKeyMapping": {
+    "title": "Key Mappings",
+    "resetTitle": "Reset key mappings to defaults",
+    "controllerBoard": "Controller Board",
+    "controllerBoardDescription": "Click any green button on the board and press a key to assign it.",
+    "listeningPrompt": "Press any key to assign to {{buttonLabel}}...",
+    "legendMappable": "Mappable",
+    "legendReserved": "Reserved",
+    "legendListening": "Listening..."
+  },
+  "backupRestore": {
+    "title": "Backup & Restore",
+    "importConfig": "Import Config",
+    "exportConfig": "Export Config",
+    "exporting": "Exporting...",
+    "exportingFromDevice": "Fetching configuration from device — this may take a few seconds if a PS4 auth key is stored.",
+    "exportingLocal": "Saving configuration...",
+    "description": "Export your current configuration to a JSON file, or import a previously saved config.",
+    "dialog": {
+      "title": "Import Configuration",
+      "descConfirm": "Review what will happen before applying.",
+      "descImporting": "Applying configuration to device...",
+      "descDone": "Configuration applied successfully.",
+      "descRebooting": "Controller is rebooting.",
+      "descError": "Something went wrong.",
+      "willTitle": "This will:",
+      "willReplacePads": "Replace all pad thresholds, timing, and key mappings",
+      "willUploadPs4": "Upload a PS4 authentication key",
+      "willSaveImmediately": "Save settings to the controller immediately",
+      "rebootWarning": "The controller will reboot after importing the PS4 auth key. You will need to reconnect.",
+      "cancel": "Cancel",
+      "import": "Import",
+      "applyingWithPs4": "Applying settings and uploading PS4 auth key...",
+      "applyingSettings": "Applying settings...",
+      "allSettingsApplied": "All settings have been applied.",
+      "done": "Done",
+      "configImported": "Config imported!",
+      "rebootingDescription": "The controller is rebooting to activate the PS4 auth key. Reconnect when it comes back online.",
+      "close": "Close",
+      "unknownError": "An unknown error occurred.",
+      "errorInvalidFile": "Invalid config file: missing required fields.",
+      "errorReadFailed": "Failed to read config file. Make sure it is a valid JSON backup.",
+      "errorImportFailed": "Import failed. Check your connection and try again."
+    }
+  }
+}

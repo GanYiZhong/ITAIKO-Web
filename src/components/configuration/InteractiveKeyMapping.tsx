@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,7 @@ const BUTTON_MAPPINGS: Record<string, { category: keyof KeyMappings; key: string
 };
 
 export function InteractiveKeyMapping() {
+  const { t } = useTranslation("config");
   const { config, updateKeyMapping, isConnected, resetKeyMappings } = useDevice();
   const keyMappings = config.keyMappings;
   // We use this state only to signal that SVG is injected and ready for manipulation
@@ -265,7 +267,7 @@ export function InteractiveKeyMapping() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="font-medium flex items-center gap-2">
-          Key Mappings
+          {t("interactiveKeyMapping.title")}
           <HelpButton helpKey="key-mappings" />
         </h3>
         <Button
@@ -273,7 +275,7 @@ export function InteractiveKeyMapping() {
           size="icon"
           onClick={resetKeyMappings}
           disabled={!isConnected}
-          title="Reset key mappings to defaults"
+          title={t("interactiveKeyMapping.resetTitle")}
         >
           <RotateCcw className="h-4 w-4" />
         </Button>
@@ -282,16 +284,15 @@ export function InteractiveKeyMapping() {
       {isListening && selectedButton && (
         <div className="bg-blue-50 border border-blue-200 p-3 rounded-md">
           <p className="text-sm text-blue-800 text-center font-medium animate-pulse">
-            Press any key to assign to {selectedButton.replace(/--/g, " (").replace(/-/g, " ").replace(/  /g, " ")}...
+            {t("interactiveKeyMapping.listeningPrompt", { buttonLabel: selectedButton.replace(/--/g, " (").replace(/-/g, " ").replace(/  /g, " ") })}
           </p>
         </div>
       )}
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Controller Board</CardTitle>
-          <CardDescription>            Click any green button on the board and press a key to assign it.
-          </CardDescription>
+          <CardTitle className="text-base">{t("interactiveKeyMapping.controllerBoard")}</CardTitle>
+          <CardDescription>{t("interactiveKeyMapping.controllerBoardDescription")}</CardDescription>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-4">
@@ -309,15 +310,15 @@ export function InteractiveKeyMapping() {
           <div className="mt-4 flex flex-wrap gap-4 justify-center text-sm">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded" style={{ backgroundColor: "#22c55e" }} />
-              <span>Mappable</span>
+              <span>{t("interactiveKeyMapping.legendMappable")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded bg-white border border-gray-300" />
-              <span>Reserved</span>
+              <span>{t("interactiveKeyMapping.legendReserved")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded" style={{ backgroundColor: "#3b82f6" }} />
-              <span>Listening...</span>
+              <span>{t("interactiveKeyMapping.legendListening")}</span>
             </div>
           </div>
 

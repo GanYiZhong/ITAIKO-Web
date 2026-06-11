@@ -1,25 +1,30 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { HelpButton } from "@/components/ui/help-modal";
-import { PAD_NAMES, PAD_LABELS, PAD_COLORS } from "@/types";
+import { PAD_NAMES, PAD_COLORS } from "@/types";
+import { usePadLabels } from "@/i18n/pad-labels";
 import type { PadName, KeyMappings } from "@/types";
 import { hidToKeyName, browserKeyToHid } from "@/lib/hid-keycodes";
 import { RotateCcw } from "lucide-react";
 
-const PLAYERS: { key: "drumP1" | "drumP2"; label: string }[] = [
-  { key: "drumP1", label: "Player 1" },
-  { key: "drumP2", label: "Player 2" },
-];
 
 export function DrumKeyMapping() {
+  const { t } = useTranslation("config");
+  const padLabels = usePadLabels();
   const { config, updateKeyMapping, isConnected, resetKeyMappings } = useDevice();
   const keyMappings = config.keyMappings;
   const [selectedSlot, setSelectedSlot] = useState<{ player: keyof KeyMappings; pad: PadName } | null>(null);
   const [isListening, setIsListening] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const players: { key: "drumP1" | "drumP2"; label: string }[] = [
+    { key: "drumP1", label: t("drumKeyMapping.player1") },
+    { key: "drumP2", label: t("drumKeyMapping.player2") },
+  ];
 
   const cancelListening = useCallback(() => {
     setIsListening(false);
@@ -76,7 +81,7 @@ export function DrumKeyMapping() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-base flex items-center gap-2">
-              Drum Key Bindings
+              {t("drumKeyMapping.title")}
               <HelpButton helpKey="drum-key-bindings" />
             </CardTitle>
             <Button
@@ -84,7 +89,7 @@ export function DrumKeyMapping() {
               size="icon"
               onClick={resetKeyMappings}
               disabled={!isConnected}
-              title="Reset key mappings to defaults"
+              title={t("drumKeyMapping.resetTitle")}
             >
               <RotateCcw className="h-4 w-4" />
             </Button>
@@ -94,21 +99,21 @@ export function DrumKeyMapping() {
           {isListening && selectedSlot && (
             <div className="bg-blue-950/50 border border-blue-500/30 p-3 rounded-md mb-4">
               <p className="text-sm text-blue-300 text-center font-medium animate-pulse">
-                Press any key to assign to {PAD_LABELS[selectedSlot.pad]}...
+                {t("drumKeyMapping.listeningPrompt", { padLabel: padLabels[selectedSlot.pad] })}
               </p>
             </div>
           )}
 
           <Tabs defaultValue="drumP1" onValueChange={handleTabChange}>
             <TabsList className="w-full">
-              {PLAYERS.map((p) => (
+              {players.map((p) => (
                 <TabsTrigger key={p.key} value={p.key}>
                   {p.label}
                 </TabsTrigger>
               ))}
             </TabsList>
 
-            {PLAYERS.map((player) => (
+            {players.map((player) => (
               <TabsContent key={player.key} value={player.key}>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-3">
                   {PAD_NAMES.map((pad) => {
@@ -130,7 +135,7 @@ export function DrumKeyMapping() {
                         `}
                         style={{ borderLeftColor: PAD_COLORS[pad] }}
                       >
-                        <span className="text-xs text-muted-foreground">{PAD_LABELS[pad]}</span>
+                        <span className="text-xs text-muted-foreground">{padLabels[pad]}</span>
                         <span className={`text-lg font-bold ${isActive ? "text-blue-400 animate-pulse" : ""}`}>
                           {isActive ? "..." : (keyName || "---")}
                         </span>

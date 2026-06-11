@@ -1,0 +1,105 @@
+{
+  "globalSettings": {
+    "title": "Global Settings",
+    "description": "Settings that affect the overall behavior of the drum.",
+    "allowDoubleInputs": {
+      "heading": "Allow Double Inputs",
+      "body": "Enabling this option allows you to hit both pads harder and hit big notes. Using this functionality requires setting the heavy trigger setting in the pad thresholds."
+    }
+  },
+  "padThresholds": {
+    "title": "Pad Thresholds",
+    "description": "Configure the sensitivity and trigger levels for each pad.",
+    "lightTrigger": {
+      "heading": "Light Trigger",
+      "body": "How hard the pad must be hit to register a note. This is the most important setting to configure."
+    },
+    "heavyTrigger": {
+      "heading": "Heavy Trigger",
+      "body": "This field appears only after enabling \"Allow Double Inputs\" in Global Settings. This threshold is what decides if a hit to a pad bypasses the debounce and lets you hit a Big Note."
+    },
+    "cutoff": {
+      "heading": "Cutoff",
+      "warning": "Verify you actually have this issue in the live monitor before setting this slider to a value lower than 4095.",
+      "body": "This setting is used in the situation where hitting a pad very hard causes a spike in another unrelated pad. In some boards we found out some current can leak into the analog input of another pin causing misreadings. This cutoff slider makes it so any hit that goes over this threshold is instantly ignored."
+    }
+  },
+  "timingSettings": {
+    "title": "Timing Settings",
+    "description": "Configure timing-related parameters for hit detection.",
+    "debounceTime": {
+      "heading": "Debounce Time",
+      "body": "Documentation coming soon..."
+    },
+    "sampleCount": {
+      "heading": "Sample Count",
+      "body": "Documentation coming soon..."
+    }
+  },
+  "adcChannels": {
+    "title": "ADC Channel Mapping",
+    "description": "Map physical ADC channels to drum pads.",
+    "whatAreAdcChannels": {
+      "heading": "What are ADC Channels?",
+      "body": "Documentation coming soon..."
+    },
+    "channelAssignment": {
+      "heading": "Channel Assignment",
+      "body": "Documentation coming soon..."
+    }
+  },
+  "keyMappings": {
+    "title": "Key Mappings",
+    "description": "Configure which keys are sent when pads are hit.",
+    "gamepadButtons": {
+      "heading": "Gamepad Buttons",
+      "body": "Documentation coming soon..."
+    },
+    "keyboardKeys": {
+      "heading": "Keyboard Keys",
+      "body": "Documentation coming soon..."
+    }
+  },
+  "bootScreen": {
+    "title": "Boot Screen",
+    "description": "Customize the startup splash screen of your controller.",
+    "imageRequirements": {
+      "heading": "Image Requirements",
+      "intro": "The image will be converted to a 128x64 pixel 1-bit monochrome (black and white) bitmap.",
+      "formatItem": "Supported formats: PNG, JPG, BMP",
+      "aspectRatioItem": "Optimal aspect ratio: 2:1",
+      "colorsItem": "Colors: Will be dithered/thresholded to black and white"
+    },
+    "howToUse": {
+      "heading": "How to Use",
+      "step1": "1. Select an image file.",
+      "step2": "2. Preview the monochrome conversion.",
+      "step3": "3. Click \"Upload to Device\" to flash the new image.",
+      "step4": "4. The new splash screen will appear next time you plug in the device."
+    },
+    "restoringDefault": {
+      "heading": "Restoring Default",
+      "body": "Click the trash icon to clear the custom image and restore the original ITAIKO logo."
+    }
+  },
+  "liveMonitor": {
+    "title": "Live Monitor",
+    "description": "Real-time visualization of pad inputs.",
+    "graphDisplay": {
+      "heading": "Graph Display",
+      "body": "Documentation coming soon..."
+    },
+    "triggerIndicators": {
+      "heading": "Trigger Indicators",
+      "body": "Documentation coming soon..."
+    }
+  },
+  "visualDrum": {
+    "title": "Visual Drum",
+    "description": "Visual representation of drum hits.",
+    "howToUse": {
+      "heading": "How to Use",
+      "body": "Documentation coming soon..."
+    }
+  }
+}

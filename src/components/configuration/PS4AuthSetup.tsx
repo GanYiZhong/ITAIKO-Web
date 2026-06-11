@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { useTranslation, Trans } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,6 +54,7 @@ function SetupModalContent({
   onBack: () => void;
   onClose: () => void;
 }) {
+  const { t } = useTranslation("setup");
   const canValidate = Boolean(keyPemFile && serialFile && signatureFile);
 
   if (step === "select" || step === "error") {
@@ -60,12 +62,24 @@ function SetupModalContent({
       <>
         <div className="space-y-4 py-2">
           <p className="text-sm text-muted-foreground">
-            You'll need three files extracted from a PS4 DualShock 4 controller:
+            {t("ps4AuthSetup.setupModal.filesIntro")}
           </p>
           <ol className="text-sm text-muted-foreground list-decimal list-inside space-y-1 ml-1">
-            <li><code>key.pem</code> — the private RSA key</li>
-            <li><code>serial.txt</code> — the controller serial (hex)</li>
-            <li><code>sig.bin</code> — the signature blob</li>
+            <li>
+              <Trans i18nKey="ps4AuthSetup.setupModal.fileList.keyPem" ns="setup">
+                <code>key.pem</code> — the private RSA key
+              </Trans>
+            </li>
+            <li>
+              <Trans i18nKey="ps4AuthSetup.setupModal.fileList.serialTxt" ns="setup">
+                <code>serial.txt</code> — the controller serial (hex)
+              </Trans>
+            </li>
+            <li>
+              <Trans i18nKey="ps4AuthSetup.setupModal.fileList.sigBin" ns="setup">
+                <code>sig.bin</code> — the signature blob
+              </Trans>
+            </li>
           </ol>
 
           <div className="grid grid-cols-1 gap-3 pt-2">
@@ -107,9 +121,9 @@ function SetupModalContent({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>{t("ps4AuthSetup.setupModal.buttons.cancel")}</Button>
           <Button onClick={onValidate} disabled={!canValidate}>
-            Continue
+            {t("ps4AuthSetup.setupModal.buttons.continue")}
           </Button>
         </DialogFooter>
       </>
@@ -121,26 +135,28 @@ function SetupModalContent({
       <>
         <div className="space-y-4 py-2">
           <div className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm space-y-1">
-            <p className="font-medium text-emerald-700">Files validated successfully</p>
+            <p className="font-medium text-emerald-700">{t("ps4AuthSetup.setupModal.validated.heading")}</p>
             <p className="text-muted-foreground">
-              Serial: {generatedData?.serialBytes.length ?? 0} bytes &nbsp;·&nbsp;
-              Signature: {generatedData?.signatureBytes.length ?? 0} bytes &nbsp;·&nbsp;
-              Key: {generatedData?.keyPemText.length ?? 0} chars
+              {t("ps4AuthSetup.setupModal.validated.summary", {
+                serialBytes: generatedData?.serialBytes.length ?? 0,
+                signatureBytes: generatedData?.signatureBytes.length ?? 0,
+                keyPemChars: generatedData?.keyPemText.length ?? 0,
+              })}
             </p>
           </div>
           <div className="rounded-md border bg-muted/40 px-4 py-3 text-sm text-muted-foreground space-y-1">
-            <p className="font-medium text-foreground">What will happen:</p>
+            <p className="font-medium text-foreground">{t("ps4AuthSetup.setupModal.whatWillHappen.heading")}</p>
             <ol className="list-decimal list-inside space-y-1 ml-1">
-              <li>The credentials are uploaded to the controller.</li>
-              <li>The controller reboots automatically.</li>
-              <li>Reconnect and switch to PS4 mode.</li>
+              <li>{t("ps4AuthSetup.setupModal.whatWillHappen.step1")}</li>
+              <li>{t("ps4AuthSetup.setupModal.whatWillHappen.step2")}</li>
+              <li>{t("ps4AuthSetup.setupModal.whatWillHappen.step3")}</li>
             </ol>
           </div>
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={onBack}>Back</Button>
-          <Button onClick={onUpload}>Upload to Controller</Button>
+          <Button variant="outline" onClick={onBack}>{t("ps4AuthSetup.setupModal.buttons.back")}</Button>
+          <Button onClick={onUpload}>{t("ps4AuthSetup.setupModal.buttons.uploadToController")}</Button>
         </DialogFooter>
       </>
     );
@@ -150,7 +166,7 @@ function SetupModalContent({
     return (
       <div className="flex flex-col items-center justify-center py-8 space-y-4">
         <Loader2 className="h-12 w-12 animate-spin text-primary" />
-        <p className="text-sm text-muted-foreground">Uploading credentials to controller...</p>
+        <p className="text-sm text-muted-foreground">{t("ps4AuthSetup.setupModal.uploading")}</p>
       </div>
     );
   }
@@ -160,13 +176,13 @@ function SetupModalContent({
       <>
         <div className="flex flex-col items-center justify-center py-6 space-y-3 text-center">
           <CheckCircle2 className="h-14 w-14 text-green-500" />
-          <h3 className="text-base font-semibold">Credentials uploaded!</h3>
+          <h3 className="text-base font-semibold">{t("ps4AuthSetup.setupModal.rebooting.heading")}</h3>
           <p className="text-sm text-muted-foreground max-w-xs">
-            The controller is rebooting. Reconnect once it comes back online, then switch to PS4 mode.
+            {t("ps4AuthSetup.setupModal.rebooting.body")}
           </p>
         </div>
         <DialogFooter>
-          <Button className="w-full" onClick={onClose}>Close</Button>
+          <Button className="w-full" onClick={onClose}>{t("ps4AuthSetup.setupModal.buttons.close")}</Button>
         </DialogFooter>
       </>
     );
@@ -176,6 +192,7 @@ function SetupModalContent({
 }
 
 export function PS4AuthSetup() {
+  const { t } = useTranslation("setup");
   const { isConnected, isReady, readPs4AuthStatus, uploadPs4Auth, clearPs4Auth, disconnect } = useDevice();
 
   const [authPresent, setAuthPresent] = useState<boolean | null>(null);
@@ -256,7 +273,7 @@ export function PS4AuthSetup() {
       setGeneratedData(data);
       setStep("confirm");
     } catch (e) {
-      setSetupError(e instanceof Error ? e.message : "Failed to read files. Check their format and try again.");
+      setSetupError(e instanceof Error ? e.message : t("ps4AuthSetup.setupModal.errors.readFailed"));
       setStep("error");
     }
   };
@@ -269,7 +286,7 @@ export function PS4AuthSetup() {
       setStep("rebooting");
       await disconnect();
     } else {
-      setSetupError("Upload failed. Check your connection and try again.");
+      setSetupError(t("ps4AuthSetup.setupModal.errors.uploadFailed"));
       setStep("error");
     }
   };
@@ -289,7 +306,7 @@ export function PS4AuthSetup() {
       setClearDone(true);
       await disconnect();
     } else {
-      setClearError("Clear failed. Check your connection and try again.");
+      setClearError(t("ps4AuthSetup.clearModal.errors.clearFailed"));
     }
   };
 
@@ -304,7 +321,7 @@ export function PS4AuthSetup() {
     <>
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">PS4 Authentication</CardTitle>
+          <CardTitle className="text-base">{t("ps4AuthSetup.cardTitle")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between gap-4">
@@ -312,40 +329,40 @@ export function PS4AuthSetup() {
               {!isConnected ? (
                 <>
                   <ShieldX className="h-5 w-5 text-muted-foreground shrink-0" />
-                  <span className="text-sm text-muted-foreground">Connect a device to check status.</span>
+                  <span className="text-sm text-muted-foreground">{t("ps4AuthSetup.status.connectToCheck")}</span>
                 </>
               ) : isCheckingStatus || authPresent === null ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin text-muted-foreground shrink-0" />
-                  <span className="text-sm text-muted-foreground">Checking status...</span>
+                  <span className="text-sm text-muted-foreground">{t("ps4AuthSetup.status.checkingStatus")}</span>
                 </>
               ) : authPresent ? (
                 <>
                   <ShieldCheck className="h-5 w-5 text-green-500 shrink-0" />
-                  <span className="text-sm">PS4 auth key is installed. PS4 mode is fully supported.</span>
+                  <span className="text-sm">{t("ps4AuthSetup.status.authInstalled")}</span>
                 </>
               ) : (
                 <>
                   <ShieldX className="h-5 w-5 text-amber-500 shrink-0" />
-                  <span className="text-sm text-muted-foreground">No PS4 auth key. PS4 mode will disconnect after 8 minutes.</span>
+                  <span className="text-sm text-muted-foreground">{t("ps4AuthSetup.status.noAuthKey")}</span>
                 </>
               )}
             </div>
 
             <div className="flex items-center gap-2 shrink-0">
               {isConnected && !isCheckingStatus && authPresent !== null && (
-                <Button variant="ghost" size="icon" onClick={checkStatus} title="Refresh status">
+                <Button variant="ghost" size="icon" onClick={checkStatus} title={t("ps4AuthSetup.buttons.refreshTitle")}>
                   <RefreshCw className="h-4 w-4" />
                 </Button>
               )}
               {isConnected && authPresent === false && (
                 <Button size="sm" onClick={handleOpenSetup}>
-                  Set Up
+                  {t("ps4AuthSetup.buttons.setUp")}
                 </Button>
               )}
               {isConnected && authPresent === true && (
                 <Button size="sm" variant="destructive" onClick={handleOpenClear}>
-                  Remove Key
+                  {t("ps4AuthSetup.buttons.removeKey")}
                 </Button>
               )}
             </div>
@@ -357,15 +374,15 @@ export function PS4AuthSetup() {
       <Dialog open={setupOpen} onOpenChange={(open) => { if (!open) handleCloseSetup(); }}>
         <DialogContent className="sm:max-w-115">
           <DialogHeader>
-            <DialogTitle>Set Up PS4 Authentication</DialogTitle>
+            <DialogTitle>{t("ps4AuthSetup.setupModal.title")}</DialogTitle>
             <DialogDescription>
               {step === "select" || step === "error"
-                ? "Upload your DS4 credentials to enable full PS4 compatibility."
+                ? t("ps4AuthSetup.setupModal.descriptionSelect")
                 : step === "confirm"
-                ? "Review and upload to your controller."
+                ? t("ps4AuthSetup.setupModal.descriptionConfirm")
                 : step === "uploading"
-                ? "Please wait while credentials are transferred."
-                : "Setup complete."}
+                ? t("ps4AuthSetup.setupModal.descriptionUploading")
+                : t("ps4AuthSetup.setupModal.descriptionDone")}
             </DialogDescription>
           </DialogHeader>
 
@@ -391,11 +408,11 @@ export function PS4AuthSetup() {
       <Dialog open={clearOpen} onOpenChange={(open) => { if (!open) handleCloseClear(); }}>
         <DialogContent className="sm:max-w-100">
           <DialogHeader>
-            <DialogTitle>Remove PS4 Auth Key</DialogTitle>
+            <DialogTitle>{t("ps4AuthSetup.clearModal.title")}</DialogTitle>
             <DialogDescription>
               {clearDone
-                ? "The controller is rebooting."
-                : "This will delete the stored PS4 credentials from the controller and reboot it."}
+                ? t("ps4AuthSetup.clearModal.descriptionDone")
+                : t("ps4AuthSetup.clearModal.descriptionPending")}
             </DialogDescription>
           </DialogHeader>
 
@@ -404,11 +421,11 @@ export function PS4AuthSetup() {
               <div className="flex flex-col items-center justify-center py-4 space-y-2 text-center">
                 <CheckCircle2 className="h-12 w-12 text-green-500" />
                 <p className="text-sm text-muted-foreground">
-                  Key removed. Reconnect when the controller comes back online.
+                  {t("ps4AuthSetup.clearModal.keyRemoved")}
                 </p>
               </div>
               <DialogFooter>
-                <Button className="w-full" onClick={handleCloseClear}>Close</Button>
+                <Button className="w-full" onClick={handleCloseClear}>{t("ps4AuthSetup.clearModal.buttons.close")}</Button>
               </DialogFooter>
             </>
           ) : (
@@ -421,10 +438,12 @@ export function PS4AuthSetup() {
               )}
               <DialogFooter>
                 <Button variant="outline" onClick={handleCloseClear} disabled={isClearing}>
-                  Cancel
+                  {t("ps4AuthSetup.clearModal.buttons.cancel")}
                 </Button>
                 <Button variant="destructive" onClick={handleClear} disabled={isClearing}>
-                  {isClearing ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Removing...</> : "Remove Key"}
+                  {isClearing
+                    ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("ps4AuthSetup.clearModal.buttons.removing")}</>
+                    : t("ps4AuthSetup.clearModal.buttons.remove")}
                 </Button>
               </DialogFooter>
             </>

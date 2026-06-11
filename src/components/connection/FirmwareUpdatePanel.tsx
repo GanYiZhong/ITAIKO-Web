@@ -1,9 +1,11 @@
+import { useTranslation } from "react-i18next";
 import { useDevice } from "@/context/DeviceContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle, Download } from "lucide-react";
 
 export function FirmwareUpdatePanel() {
+  const { t } = useTranslation("connection");
   const { isConnected, firmwareUpdate } = useDevice();
   const { status, latestFirmware, setModalOpen } = firmwareUpdate;
 
@@ -20,7 +22,7 @@ export function FirmwareUpdatePanel() {
         <CardContent className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2 text-amber-600 font-medium">
             <AlertCircle className="h-3.5 w-3.5" />
-            <span>Update v{latestFirmware?.version} available</span>
+            <span>{t("firmwareUpdatePanel.updateAvailable", { version: latestFirmware?.version })}</span>
           </div>
           <Button
             size="sm"
@@ -29,7 +31,7 @@ export function FirmwareUpdatePanel() {
             onClick={() => setModalOpen(true)}
           >
             <Download className="mr-1.5 h-3 w-3" />
-            Update
+            {t("firmwareUpdatePanel.updateButton")}
           </Button>
         </CardContent>
       </Card>
