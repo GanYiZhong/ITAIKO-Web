@@ -9,6 +9,14 @@
     "allowDoubleInputs": "Allow Double Inputs",
     "allowDoubleInputsDescription": "Enable heavy trigger threshold for fast double hits"
   },
+  "rollBoost": {
+    "title": "Roll Boost",
+    "description": "During a two-handed don roll, auto-alternates left/right and mutes ka crosstalk so the game scores the roll cleanly. Output only — sensing is unchanged. 0 = off; set the window slightly above your key hold time (≈35–45 ms).",
+    "label": "Window",
+    "off": "Off",
+    "bufferedInput": "Buffered Input",
+    "bufferedInputDescription": "Fast hits that land while a pad is still held are queued and replayed instead of dropped, so the game registers every hit in a fast roll. Adds slight latency when overdriven."
+  },
   "padThresholds": {
     "title": "Pad Thresholds",
     "resetTitle": "Reset pad thresholds to defaults"

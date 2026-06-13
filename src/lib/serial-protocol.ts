@@ -40,13 +40,15 @@ export function parseInputStreamLine(line: string): Record<PadName, boolean> | n
 
 // Parse settings response from device
 // Format: key:value lines (0:800, 1:800, etc.)
-// Also extracts version if present (Version:x.x.x)
+// Also extracts version if present (Version:x.x.x) and edition if present (Edition:ZhongTaiko)
 export function parseSettingsResponse(response: string): {
   settings: Map<number, number>;
   version?: string;
+  edition?: string;
 } {
   const settings = new Map<number, number>();
   let version: string | undefined;
+  let edition: string | undefined;
   const lines = response.trim().split("\n");
 
   for (const line of lines) {
@@ -57,16 +59,19 @@ export function parseSettingsResponse(response: string): {
       settings.set(key, value);
     } else if (line.startsWith("Version:")) {
       version = line.substring(8).trim();
+    } else if (line.startsWith("Edition:")) {
+      edition = line.substring(8).trim();
     }
   }
 
-  return { settings, version };
+  return { settings, version, edition };
 }
 
 // Convert settings map to DeviceConfig
 export function settingsToConfig(
   settings: Map<number, number>,
-  version?: string
+  version?: string,
+  edition?: string
 ): DeviceConfig {
   const getPadThresholds = (pad: PadName) => ({
     light: settings.get(SETTING_INDICES.lightThreshold[pad]) ?? 800,
@@ -89,7 +94,10 @@ export function settingsToConfig(
       individualDebounce: settings.get(SETTING_INDICES.individualDebounce) ?? 19,
       keyHoldTime: settings.get(SETTING_INDICES.keyHoldTime) ?? 25,
     },
+    rollBoostMs: settings.get(SETTING_INDICES.rollBoost) ?? 0,
+    bufferedInput: (settings.get(SETTING_INDICES.bufferedInput) ?? 0) === 1,
     firmwareVersion: version,
+    edition,
   };
 
   // Add key mappings if present (firmware may not support them)
@@ -211,6 +219,12 @@ export function configToSettingsString(config: DeviceConfig): string {
     pairs.push(`${SETTING_INDICES.adcChannel.donRight}:${adc.donRight}`);
     pairs.push(`${SETTING_INDICES.adcChannel.kaRight}:${adc.kaRight}`);
   }
+
+  // Roll boost window (46)
+  pairs.push(`${SETTING_INDICES.rollBoost}:${config.rollBoostMs ?? 0}`);
+
+  // Buffered Input (47)
+  pairs.push(`${SETTING_INDICES.bufferedInput}:${config.bufferedInput ? 1 : 0}`);
 
   // Sort by index
   pairs.sort((a, b) => {

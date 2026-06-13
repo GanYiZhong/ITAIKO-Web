@@ -10,13 +10,17 @@ import { LiveMonitorTab } from "@/components/monitor/LiveMonitorTab";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useDevice } from "@/context/DeviceContext";
 import { initializeHelpContent } from "@/lib/help-content";
+import { isZhongTaiko } from "@/lib/edition";
 
 // Initialize help content
 initializeHelpContent();
 
 function ConfigurePageContent() {
   const { t } = useTranslation("pages");
+  const { isConnected, config } = useDevice();
+  const showZhongTaiko = isConnected && isZhongTaiko(config.edition);
   const [searchParams, setSearchParams] = useSearchParams();
   const currentTab = searchParams.get("tab") || "config";
   const advancedMode = searchParams.get("advanced") === "true";
@@ -43,7 +47,12 @@ function ConfigurePageContent() {
       {/* Header with connection status - fixed height */}
       <header className="border-b w-full flex-shrink-0">
         <div className="flex h-14 items-center justify-between px-4 max-w-5xl mx-auto w-full">
-          <Link to="/" className="font-bold text-xl shrink-0">
+          <Link to="/" className="font-bold text-xl shrink-0 flex items-center gap-2">
+            {showZhongTaiko && (
+              <span className="font-extrabold tracking-tight text-lg sm:text-xl whitespace-nowrap">
+                ZhongTaiko <span className="text-muted-foreground font-normal">×</span>
+              </span>
+            )}
             <img src="itaiko.png" className="pixelated drag-none" alt={t("configure.header.logoAlt")} />
           </Link>
           <div className="flex items-center gap-4">

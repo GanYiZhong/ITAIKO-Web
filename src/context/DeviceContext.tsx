@@ -48,6 +48,8 @@ interface DeviceContextValue {
   updatePadThreshold: (pad: PadName, field: keyof PadThresholds, value: number, commit?: boolean) => void;
   updateTiming: (field: keyof TimingConfig, value: number) => void;
   setDoubleInputMode: (enabled: boolean) => void;
+  setRollBoostMs: (value: number, commit?: boolean) => void;
+  setBufferedInput: (enabled: boolean, commit?: boolean) => void;
   updateKeyMapping: (category: keyof KeyMappings, key: string, value: number) => void;
   updateADCChannel: (pad: keyof ADCChannels, channel: number) => void;
   exportConfig: () => Promise<void>;
@@ -233,6 +235,8 @@ export function DeviceProvider({ children }: DeviceProviderProps) {
       updatePadThreshold: deviceConfig.updatePadThreshold,
       updateTiming: deviceConfig.updateTiming,
       setDoubleInputMode: deviceConfig.setDoubleInputMode,
+      setRollBoostMs: deviceConfig.setRollBoostMs,
+      setBufferedInput: deviceConfig.setBufferedInput,
       updateKeyMapping: deviceConfig.updateKeyMapping,
       updateADCChannel: deviceConfig.updateADCChannel,
       exportConfig: deviceConfig.exportConfig,

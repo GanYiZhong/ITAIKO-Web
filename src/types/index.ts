@@ -126,7 +126,10 @@ export interface DeviceConfig {
   timing: TimingConfig;
   keyMappings?: KeyMappings;
   adcChannels?: ADCChannels;
+  rollBoostMs?: number; // 連打增速 window in ms, 0 = off (setting 46)
+  bufferedInput?: boolean; // buffer & replay fast same-pad re-hits (setting 47)
   firmwareVersion?: string;
+  edition?: string; // Device edition / branding (e.g. "iTAIKO", "ZhongTaiko")
 }
 
 export interface PS4AuthBackupData {
@@ -215,4 +218,12 @@ export const SETTING_INDICES = {
     donRight: 44,
     kaRight: 45,
   },
+  // Roll boost / 連打增速 window in ms (46)
+  rollBoost: 46,
+  // Buffered Input on/off (47)
+  bufferedInput: 47,
 } as const;
+
+// Roll boost window limits (ms). Must match firmware RollBoost::kMaxWindowMs.
+export const ROLL_BOOST_MIN = 0;
+export const ROLL_BOOST_MAX = 50;

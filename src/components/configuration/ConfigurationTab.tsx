@@ -10,6 +10,7 @@ import { TimingSettings } from "./TimingSettings";
 import { ADCChannelSettings } from "./ADCChannelSettings";
 import { InteractiveKeyMapping } from "./InteractiveKeyMapping";
 import { DrumKeyMapping } from "./DrumKeyMapping";
+import { RollBoostSettings } from "./RollBoostSettings";
 import { PS4AuthSetup } from "./PS4AuthSetup";
 import { BackupRestore } from "./BackupRestore";
 import { PAD_NAMES, PAD_COLORS } from "@/types";
@@ -215,6 +216,9 @@ export function ConfigurationTab() {
 
         {/* Drum Key Bindings - Always visible */}
         <DrumKeyMapping />
+
+        {/* Roll Boost (連打增速) - Always visible */}
+        <RollBoostSettings />
 
         {/* Advanced Settings */}
         {advancedMode && (

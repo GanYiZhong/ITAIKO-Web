@@ -9,6 +9,14 @@
     "allowDoubleInputs": "允許雙重輸入",
     "allowDoubleInputsDescription": "啟用重擊閾值以支援快速連擊"
   },
+  "rollBoost": {
+    "title": "連打增速",
+    "description": "雙手連打咚時自動左右交替、並抑制咖串音，讓遊戲把連打判得乾淨。純輸出層，不影響感應判定。0 = 關閉；視窗建議設為略大於按鍵保持時間（約 35–45 ms）。",
+    "label": "視窗",
+    "off": "關閉",
+    "bufferedInput": "輸入緩衝",
+    "bufferedInputDescription": "按鍵還在保持中時打到的快速連打，會被緩衝並在釋放後補發，而不是直接丟棄，讓遊戲在高速連打時每一下都吃得到。輸入過快時會有些微延遲。"
+  },
   "padThresholds": {
     "title": "鼓面閾值",
     "resetTitle": "重設鼓面閾值為預設值"

@@ -55,6 +55,8 @@ export const DEFAULT_DEVICE_CONFIG: DeviceConfig = {
     donRight: 2,  // ADC channel 2
     kaRight: 3,   // ADC channel 3
   },
+  rollBoostMs: 0, // 連打增速 off by default
+  bufferedInput: false, // buffered fast-roll re-emission off by default
 };
 
 export const DEFAULT_MONITOR_SETTINGS: MonitorSettings = {

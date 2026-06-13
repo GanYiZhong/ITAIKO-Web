@@ -21,6 +21,7 @@ import {
   parsePs4AuthExportResponse,
 } from "@/lib/ps4-auth-generator";
 import { DEFAULT_DEVICE_CONFIG } from "@/lib/default-config";
+import { rememberEdition } from "@/lib/edition";
 
 interface UseDeviceConfigProps {
   sendCommand: (command: DeviceCommand, data?: string) => Promise<void>;
@@ -81,6 +82,8 @@ interface UseDeviceConfigReturn {
   ) => void;
   updateTiming: (field: keyof TimingConfig, value: number, commit?: boolean) => void;
   setDoubleInputMode: (enabled: boolean, commit?: boolean) => void;
+  setRollBoostMs: (value: number, commit?: boolean) => void;
+  setBufferedInput: (enabled: boolean, commit?: boolean) => void;
   updateKeyMapping: (
     category: keyof KeyMappings,
     key: string,
@@ -176,10 +179,11 @@ export function useDeviceConfig({
       clearBuffer?.();
       await sendCommand(DeviceCommandValues.READ_SETTINGS);
       const response = await readUntilTimeout(1000);
-      const { settings, version } = parseSettingsResponse(response);
+      const { settings, version, edition } = parseSettingsResponse(response);
 
       if (settings.size > 0) {
-        const newConfig = settingsToConfig(settings, version);
+        const newConfig = settingsToConfig(settings, version, edition);
+        rememberEdition(edition);
         setConfig(newConfig);
         setSavedConfig(newConfig);
         setLastCommittedConfig(newConfig);
@@ -476,6 +480,32 @@ export function useDeviceConfig({
     });
   }, [lastCommittedConfig]);
 
+  const setRollBoostMs = useCallback((value: number, commit = true): void => {
+    setConfig((prev) => {
+      const next = {
+        ...prev,
+        rollBoostMs: value,
+      };
+      if (commit) {
+        handleCommit(next);
+      }
+      return next;
+    });
+  }, [lastCommittedConfig]);
+
+  const setBufferedInput = useCallback((enabled: boolean, commit = true): void => {
+    setConfig((prev) => {
+      const next = {
+        ...prev,
+        bufferedInput: enabled,
+      };
+      if (commit) {
+        handleCommit(next);
+      }
+      return next;
+    });
+  }, [lastCommittedConfig]);
+
   const updateKeyMapping = useCallback(
     (category: keyof KeyMappings, key: string, value: number, commit = true): void => {
       setConfig((prev) => {
@@ -545,6 +575,8 @@ export function useDeviceConfig({
     updatePadThreshold,
     updateTiming,
     setDoubleInputMode,
+    setRollBoostMs,
+    setBufferedInput,
     updateKeyMapping,
     updateADCChannel,
   };

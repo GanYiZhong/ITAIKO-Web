@@ -5,9 +5,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Drum, Settings, Activity, Usb } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useState } from "react";
+import { getRememberedEdition, isZhongTaiko, ZHONGTAIKO_BRAND } from "@/lib/edition";
 
 export function LandingPage() {
   const { t } = useTranslation("pages");
+  // Reflect the last-connected device's edition (persisted in localStorage).
+  const [showZhongTaiko] = useState(() => isZhongTaiko(getRememberedEdition()));
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -23,6 +27,11 @@ export function LandingPage() {
       <main className="flex-1 flex flex-col items-center justify-center gap-12 p-8">
         <div className="text-center space-y-4 items-center flex flex-col">
           <img src="itaiko.png" className="pixelated w-96 drag-none" />
+          {showZhongTaiko && (
+            <p className="text-2xl font-extrabold tracking-tight">
+              {ZHONGTAIKO_BRAND}
+            </p>
+          )}
           <p className="text-xl text-muted-foreground max-w-lg mx-auto">
             {t("landing.hero.subtitle")}
           </p>
